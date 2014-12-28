@@ -1,0 +1,41 @@
+
+elf.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 2, 2
+  size: 211, 277
+  orig: 211, 277
+  offset: 0, 0
+  index: -1
+l_arm
+  rotate: false
+  xy: 384, 102
+  size: 40, 111
+  orig: 40, 111
+  offset: 0, 0
+  index: -1
+l_foot
+  rotate: false
+  xy: 281, 142
+  size: 101, 71
+  orig: 101, 71
+  offset: 0, 0
+  index: -1
+r_arm
+  rotate: false
+  xy: 426, 102
+  size: 40, 111
+  orig: 40, 111
+  offset: 0, 0
+  index: -1
+r_foot
+  rotate: false
+  xy: 281, 69
+  size: 101, 71
+  orig: 101, 71
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,76 @@
+
+tree.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+blue_ornament.png
+  rotate: false
+  xy: 87, 37
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+blue_ornament.png copy
+  rotate: false
+  xy: 87, 37
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+gift_box_1.png
+  rotate: false
+  xy: 2, 2
+  size: 83, 59
+  orig: 83, 59
+  offset: 0, 0
+  index: -1
+green_ornament.png
+  rotate: false
+  xy: 178, 182
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+pine_tree_1.png
+  rotate: false
+  xy: 2, 63
+  size: 174, 191
+  orig: 174, 191
+  offset: 0, 0
+  index: -1
+red_ornament.png
+  rotate: false
+  xy: 228, 230
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+red_ornament.png copy
+  rotate: false
+  xy: 228, 230
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+star.png
+  rotate: false
+  xy: 178, 208
+  size: 48, 46
+  orig: 48, 46
+  offset: 0, 0
+  index: -1
+yellow_ornament.png
+  rotate: false
+  xy: 87, 11
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+yellow_ornament.png copy
+  rotate: false
+  xy: 87, 11
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1

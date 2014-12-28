@@ -1,0 +1,25 @@
+snow_ground.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+snow_ground
+  rotate: false
+  xy: 2, 2
+  size: 1022, 136
+  orig: 1022, 136
+  offset: 0, 0
+  index: 1
+snow_ground
+  rotate: false
+  xy: 2, 140
+  size: 1022, 136
+  orig: 1022, 136
+  offset: 0, 0
+  index: 2
+snow_ground
+  rotate: false
+  xy: 2, 278
+  size: 1022, 136
+  orig: 1022, 136
+  offset: 0, 0
+  index: 3

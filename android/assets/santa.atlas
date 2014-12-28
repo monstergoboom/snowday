@@ -1,0 +1,41 @@
+
+santa.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 2, 183
+  size: 291, 551
+  orig: 291, 551
+  offset: 0, 0
+  index: -1
+l_arm
+  rotate: false
+  xy: 736, 242
+  size: 197, 232
+  orig: 197, 232
+  offset: 0, 0
+  index: -1
+l_leg
+  rotate: true
+  xy: 2, 2
+  size: 179, 288
+  orig: 179, 288
+  offset: 0, 0
+  index: -1
+r_arm
+  rotate: false
+  xy: 292, 63
+  size: 282, 118
+  orig: 282, 118
+  offset: 0, 0
+  index: -1
+r_leg
+  rotate: false
+  xy: 555, 186
+  size: 179, 288
+  orig: 179, 288
+  offset: 0, 0
+  index: -1

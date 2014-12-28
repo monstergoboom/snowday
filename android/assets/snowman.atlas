@@ -1,0 +1,55 @@
+
+snowman.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bottom
+  rotate: false
+  xy: 2, 23
+  size: 239, 231
+  orig: 239, 231
+  offset: 0, 0
+  index: -1
+l_arm
+  rotate: false
+  xy: 607, 77
+  size: 171, 177
+  orig: 171, 177
+  offset: 0, 0
+  index: -1
+middle
+  rotate: false
+  xy: 424, 75
+  size: 181, 179
+  orig: 181, 179
+  offset: 0, 0
+  index: -1
+nose
+  rotate: false
+  xy: 2, 2
+  size: 71, 19
+  orig: 71, 19
+  offset: 0, 0
+  index: -1
+r_arm
+  rotate: true
+  xy: 780, 10
+  size: 109, 137
+  orig: 109, 137
+  offset: 0, 0
+  index: -1
+top
+  rotate: false
+  xy: 243, 41
+  size: 179, 213
+  orig: 179, 213
+  offset: 0, 0
+  index: -1
+tophat
+  rotate: false
+  xy: 780, 121
+  size: 137, 133
+  orig: 137, 133
+  offset: 0, 0
+  index: -1
