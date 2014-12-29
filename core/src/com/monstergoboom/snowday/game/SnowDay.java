@@ -2,6 +2,10 @@ package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,15 +13,15 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 
-public class SnowDay extends ApplicationAdapter {
+public class SnowDay extends ApplicationAdapter implements ControllerListener {
     private PolygonSpriteBatch spriteBatch;
 
     private SantaClause santaClause;
@@ -36,8 +40,12 @@ public class SnowDay extends ApplicationAdapter {
     private Camera fontCamera;
     private SpriteBatch fontSpriteBatch;
 
+    private Array<Controller> controllers;
+
     @Override
 	public void create () {
+        controllers = Controllers.getControllers();
+
         Box2D.init();
         fontCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         fontCamera.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
@@ -80,6 +88,12 @@ public class SnowDay extends ApplicationAdapter {
         snowflakeGenerator.start();
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, true, false);
+
+        Controllers.addListener(this);
+
+        for(Controller controller: controllers) {
+            Gdx.app.log("snow day controller test", controller.getName());
+        }
 
         Gdx.app.log("Game", "display width: " + Integer.toString(Gdx.graphics.getWidth()) +
         ", display height: " + Integer.toString(Gdx.graphics.getHeight()));
@@ -158,7 +172,6 @@ public class SnowDay extends ApplicationAdapter {
             else if(obj instanceof Snowflake) {
                 Snowflake sf = (Snowflake) obj;
                 if(sf!= null) {
-                    Vector2 center = b.getWorldCenter();
                     sf.setBodyPosition(b.getPosition().x, b.getPosition().y, b.getAngle());
                 }
             }
@@ -174,5 +187,58 @@ public class SnowDay extends ApplicationAdapter {
         snowGround.update(animationTime);
         tree1.update(animationTime);
         snowflakeGenerator.update(animationTime);
+    }
+
+    @Override
+    public void connected(Controller controller) {
+
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
+
+    }
+
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+        return false;
+    }
+
+    @Override
+    public boolean buttonUp(Controller controller, int buttonCode) {
+        return false;
+    }
+
+    @Override
+    public boolean axisMoved(Controller controller, int axisCode, float value) {
+        return false;
+    }
+
+    @Override
+    public boolean povMoved(Controller controller, int povCode, PovDirection value) {
+        return false;
+    }
+
+    @Override
+    public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
+        return false;
+    }
+
+    @Override
+    public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
+        return false;
+    }
+
+    @Override
+    public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
+        return false;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        spriteBatch.dispose();
+        fontSpriteBatch.dispose();
     }
 }
