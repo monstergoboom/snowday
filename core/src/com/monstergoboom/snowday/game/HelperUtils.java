@@ -1,5 +1,9 @@
 package com.monstergoboom.snowday.game;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
@@ -16,6 +20,12 @@ public class HelperUtils {
     public static final int velocityIterations = 6;
     public static final int positionIterations = 2;
     public static final int regionIndexNone = -1;
+    public static String defaultFont = "display_font_16";
+    public static String displayFontM = "curlz_mt";
+    public static String displayFontS = "curlz_mt_16";
+    public static final Texture emptyTexture = null;
+    public static final TextureAtlas emptyTextureAtlas = null;
+    public static final String playerScoreDefaultFormat = "%06d";
 
     public static int convertUnitsToPixel(float units) {
         return (int)(units * HelperUtils.unitsToPixelsRatio);
@@ -29,13 +39,16 @@ public class HelperUtils {
         return new Vector2(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y));
     }
 
-    public static Vector2[] convertFloatToVector2(float[] vertices) {
+    public static Vector2[] convertFloatToVector2(float[] vertices, float scale) {
         java.util.ArrayList<Vector2> result = new java.util.ArrayList<>();
         for (int i = 0; i < vertices.length/2; i++) {
             float x = vertices[i * 2];
             float y = vertices[i * 2 + 1];
 
-            result.add(new Vector2(x, y));
+            Vector2 v = new Vector2(x,y);
+            v.scl(scale);
+
+            result.add(v);
         }
 
         return result.toArray(new Vector2[result.size()]);

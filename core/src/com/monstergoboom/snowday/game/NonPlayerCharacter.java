@@ -1,13 +1,14 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.esotericsoftware.spine.SkeletonData;
 
 /**
  * Created by amitrevski on 12/23/14.
  */
 public class NonPlayerCharacter extends Character {
-    public NonPlayerCharacter(String assetName, float scale, int x, int y, World b2World) {
-        super(assetName, scale, x, y, b2World);
+    public NonPlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd) {
+        super(assetName, scale, x, y, b2World, sd);
     }
 
     @Override

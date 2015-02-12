@@ -27,6 +27,8 @@ public class SnowflakeGenerator {
     protected int maxSize;
     protected int minLife;
     protected int maxLife;
+    protected int minSpeed;
+    protected int maxSpeed;
     protected String generatorAsset;
     protected String generatorRegion;
     protected int generatorIndex;
@@ -60,6 +62,7 @@ public class SnowflakeGenerator {
                               int maxSnowflakes, float emitterFrequency, int emitterDensity,
                               int particleMinSize, int particleMaxSize,
                               int particleMinLife, int particleMaxLife,
+                              int particleMinSpeed, int particleMaxSpeed,
                               World b2World) {
         x = positionX;
         y = positionY;
@@ -69,6 +72,8 @@ public class SnowflakeGenerator {
         maxSize = particleMaxSize;
         minLife = particleMinLife;
         maxLife = particleMaxLife;
+        minSpeed = particleMinSpeed;
+        maxSpeed = particleMaxSpeed;
         generatorAsset = generatorAssetName;
         generatorRegion = generatorRegionName;
         generatorIndex = generatorRegionIndex;
@@ -173,7 +178,7 @@ public class SnowflakeGenerator {
             int snowflakeSize = MathUtils.random(minSize, maxSize);
 
             Snowflake snowflake = new Snowflake(x, y, snowflakeSize, snowflakeSize,
-                    minLife, texture, atlasRegion, world);
+                    minLife, minSpeed, texture, atlasRegion);
             snowflakes.push(snowflake);
         }
     }
@@ -208,8 +213,9 @@ public class SnowflakeGenerator {
                             int posX = MathUtils.random(x, width);
                             int posY = y;
                             int life = MathUtils.random(minLife, maxLife);
+                            int speed = MathUtils.random(minSpeed, maxSpeed);
 
-                            sf.reset(posX, posY, life);
+                            sf.reset(posX, posY, life, speed);
                             emitter.push(sf);
                         }
                     }

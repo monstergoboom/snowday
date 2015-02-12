@@ -1,10 +1,5 @@
 package com.monstergoboom.snowday.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -21,7 +16,6 @@ import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonBounds;
 import com.esotericsoftware.spine.SkeletonData;
-import com.esotericsoftware.spine.SkeletonJson;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.attachments.BoundingBoxAttachment;
 
@@ -42,58 +36,98 @@ public class StaticGameObject {
     protected boolean hasAnimations;
     protected boolean hasBoundingBox;
 
-    private AssetManager assetManager;
     private Skeleton skeleton;
     private SkeletonRenderer skeletonRenderer;
     private SkeletonData skeletonData;
     private AnimationState animationState;
     private TextureAtlas textureAtlas;
+    private Texture texture;
     private TextureAtlas.AtlasRegion atlasRegion;
-    private TextureAtlasLoader textureAtlasLoader;
 
     private World world;
 
-    public StaticGameObject(String asset, String region, int index,
-                            int x, int y, float drawScale, World b2World) {
+    public StaticGameObject(int x, int y, float drawScale,
+                            World b2World, Texture ta) {
+        positionX = x;
+        positionY = y;
+        scale = drawScale;
+        world = b2World;
+        texture = ta;
+
+        needsUpdate = true;
+        hasAnimations = false;
+        hasBoundingBox = false;
+        animationRuntime = 0;
+        animationSpeed = 1.0f;
+
+        textureAtlas = null;
+        skeletonData = null;
+        skeleton = null;
+        skeletonRenderer = null;
+        animationState = null;
+        textureAtlas = null;
+        atlasRegion = null;
+    }
+
+    public StaticGameObject(int x, int y, float drawScale,
+                            String asset, String region, int index,
+                            World b2World, TextureAtlas ta)
+    {
+        positionX = x;
+        positionY = y;
+        scale = drawScale;
+        textureAtlas = ta;
         assetName = asset;
         regionName = region;
         regionIndex = index;
-        positionX = x;
-        positionY = y;
-        needsUpdate = true;
-        animationRuntime = 0;
-        scale = HelperUtils.pixelsToUnitsRatio * drawScale;
-        animationSpeed = 1.0f;
-        hasAnimations = false;
-        hasBoundingBox = false;
-        body = null;
         world = b2World;
 
-        assetManager = new AssetManager(new InternalFileHandleResolver());
-        textureAtlasLoader = new TextureAtlasLoader(new InternalFileHandleResolver());
+        needsUpdate = true;
+        hasAnimations = false;
+        hasBoundingBox = false;
+        animationRuntime = 0;
+        animationSpeed = 1.0f;
 
-        LoadTextureAtlas();
+        skeletonData = null;
+        skeleton = null;
+        skeletonRenderer = null;
+        animationState = null;
+        texture = null;
+
+        LoadTexture();
+    }
+
+    public StaticGameObject(int x, int y, float drawScale,
+                            World b2World,
+                            SkeletonData sd) {
+        positionX = x;
+        positionY = y;
+        scale = drawScale;
+        skeletonData = sd;
+        world = b2World;
+
+        needsUpdate = true;
+        hasAnimations = false;
+        hasBoundingBox = false;
+        animationRuntime = 0;
+        animationSpeed = 1.0f;
+
+        assetName = null;
+        regionName = null;
+        regionIndex = HelperUtils.regionIndexNone;
+        body = null;
+        textureAtlas = null;
+        texture = null;
+        atlasRegion = null;
+
         LoadSkeleton();
     }
 
-    private void LoadTextureAtlas() {
-        FileHandle fhAtlas = Gdx.files.internal( assetName +".atlas");
-        if(fhAtlas.exists()) {
-            textureAtlasLoader.getDependencies(assetName, fhAtlas,
-                    new TextureAtlasLoader.TextureAtlasParameter(false));
-
-            FileHandle fhTexture = Gdx.files.internal(assetName + ".png");
-
-            assetManager.load(fhTexture.path(), Texture.class);
-            assetManager.finishLoading();
-
-            textureAtlas = textureAtlasLoader.load(assetManager, assetName, fhAtlas,
-                    new TextureAtlasLoader.TextureAtlasParameter(false));
-
-            if(regionIndex > 0) {
+    public void LoadTexture() {
+        if (textureAtlas!=null) {
+            if(regionIndex >= 0 ) {
                 atlasRegion = textureAtlas.findRegion(regionName, regionIndex);
-            }
-            else {
+            } else {
                 atlasRegion = textureAtlas.findRegion(regionName);
             }
         }
@@ -117,18 +151,16 @@ public class StaticGameObject {
     }
 
     private void LoadSkeleton() {
-        FileHandle fhJson = Gdx.files.internal(assetName + ".json");
-        if(fhJson.exists()) {
+        if(skeletonData != null) {
             skeletonRenderer = new SkeletonRenderer();
-            SkeletonJson json = new SkeletonJson(textureAtlas);
-            json.setScale(scale);
-
-            skeletonData = json.readSkeletonData(fhJson);
 
             skeleton = new Skeleton(skeletonData);
             skeleton.setToSetupPose();
-            skeleton = new Skeleton(skeleton);
-            skeleton.setPosition(positionX, positionY);
+
+            skeleton.setPosition(HelperUtils.convertPixelsToUnits(positionX),
+                    HelperUtils.convertPixelsToUnits(positionY));
+            skeleton.getRootBone().setScale(scale);
+
             skeleton.updateWorldTransform();
 
             animationState = new AnimationState(new AnimationStateData(skeletonData));
@@ -139,14 +171,16 @@ public class StaticGameObject {
             animationState.setAnimation(0, animation, true);
             animationState.setTimeScale(animationSpeed);
 
-            hasAnimations = true;
-
             SkeletonBounds bounds = new SkeletonBounds();
             bounds.update(skeleton, true);
             Array<BoundingBoxAttachment> boundingBoxAttachmentArray = bounds.getBoundingBoxes();
-            for(BoundingBoxAttachment attachment: boundingBoxAttachmentArray) {
-                createBoundingBox(HelperUtils.convertFloatToVector2(attachment.getVertices()));
+            for (BoundingBoxAttachment attachment : boundingBoxAttachmentArray) {
+                createBoundingBox(HelperUtils.convertFloatToVector2(attachment.getVertices(), scale));
             }
+
+            skeleton.updateWorldTransform();
+
+            hasAnimations = true;
         }
     }
 
@@ -201,6 +235,11 @@ public class StaticGameObject {
         else {
             if (atlasRegion!=null) {
                 batch.draw(atlasRegion, HelperUtils.convertPixelsToUnits(positionX),
+                        HelperUtils.convertPixelsToUnits(positionY),
+                        HelperUtils.convertPixelsToUnits(atlasRegion.originalWidth),
+                        HelperUtils.convertPixelsToUnits(atlasRegion.originalHeight));
+            } else if (texture!=null) {
+                batch.draw(texture, HelperUtils.convertPixelsToUnits(positionX),
                         HelperUtils.convertPixelsToUnits(positionY),
                         HelperUtils.convertPixelsToUnits(atlasRegion.originalWidth),
                         HelperUtils.convertPixelsToUnits(atlasRegion.originalHeight));

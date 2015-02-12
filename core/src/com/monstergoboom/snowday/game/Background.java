@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.World;
 
 
 /**
@@ -22,16 +23,15 @@ public class Background {
     protected String assetName;
     protected String regionName;
     protected int regionIndex;
-    protected AssetManager assetManager;
-    protected TextureAtlasLoader textureAtlasLoader;
     protected TextureAtlas textureAtlas;
     protected Texture texture;
     protected TextureAtlas.AtlasRegion atlasRegion;
     protected boolean needsUpdate;
+    protected World world;
 
     final static float PIXEL_TO_METERS_RATIO = 0.00366f;
 
-    public Background(String asset, String region, int index) {
+    public Background(String asset, String region, int index, World w, TextureAtlas ta) {
         positionX = 0;
         positionY = 0;
         centerX = 0;
@@ -42,11 +42,12 @@ public class Background {
         regionName = region;
         regionIndex = index;
         needsUpdate = true;
-
-        LoadTextureAtlas();
+        world = w;
+        textureAtlas = ta;
+        texture = null;
     }
 
-    public Background(String asset, String region) {
+    public Background(String asset, String region, World w, TextureAtlas ta) {
         positionX = 0;
         positionY = 0;
         centerX = 0;
@@ -57,11 +58,12 @@ public class Background {
         regionName = region;
         regionIndex = -1;
         needsUpdate = true;
-
-        LoadTextureAtlas();
+        world = w;
+        textureAtlas = ta;
+        texture = null;
     }
 
-    public Background(String asset) {
+    public Background(String asset, World w, Texture t) {
         positionX = 0;
         positionY = 0;
         centerX = 0;
@@ -71,35 +73,11 @@ public class Background {
         regionName = "";
         regionIndex = -1;
         needsUpdate = true;
-
-        LoadTexture();
+        world = w;
+        texture = t;
+        textureAtlas = null;
     }
 
-    private void LoadTexture() {
-        FileHandle fhTexture = Gdx.files.internal(assetName + ".png");
-        texture = new Texture(fhTexture);
-    }
-
-    private void LoadTextureAtlas() {
-        FileHandle fhAtlas = Gdx.files.internal( assetName +".atlas");
-        textureAtlasLoader.getDependencies(assetName, fhAtlas,
-                new TextureAtlasLoader.TextureAtlasParameter(false));
-
-        FileHandle fhTexture = Gdx.files.internal(assetName + ".png");
-
-        assetManager.load(fhTexture.path(), Texture.class);
-        assetManager.finishLoading();
-
-        textureAtlas = textureAtlasLoader.load(assetManager, assetName, fhAtlas,
-                new TextureAtlasLoader.TextureAtlasParameter(false));
-
-        if(regionIndex >= 0 ) {
-            atlasRegion = textureAtlas.findRegion(regionName, regionIndex);
-        }
-        else {
-            atlasRegion = textureAtlas.findRegion(regionName);
-        }
-    }
     public void setPosition(int x, int y) {
         positionX = x;
         positionY = y;
@@ -121,13 +99,17 @@ public class Background {
     }
 
     public void draw(Batch batch) {
+        batch.disableBlending();
+
         if(texture != null) {
             batch.draw(texture, positionX * PIXEL_TO_METERS_RATIO, positionY * PIXEL_TO_METERS_RATIO,
-            Gdx.graphics.getWidth() * PIXEL_TO_METERS_RATIO, Gdx.graphics.getHeight() * PIXEL_TO_METERS_RATIO);
+                Gdx.graphics.getWidth() * PIXEL_TO_METERS_RATIO,
+                    Gdx.graphics.getHeight() * PIXEL_TO_METERS_RATIO);
         }
         else if(atlasRegion != null) {
             batch.draw(atlasRegion, positionX * PIXEL_TO_METERS_RATIO, positionY * PIXEL_TO_METERS_RATIO,
                     atlasRegion.originalWidth * PIXEL_TO_METERS_RATIO, atlasRegion.originalHeight * PIXEL_TO_METERS_RATIO);
         }
+        batch.enableBlending();
     }
 }

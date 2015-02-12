@@ -16,13 +16,27 @@ candy_cane
   orig: 168, 202
   offset: 0, 0
   index: 1
+cookie
+  rotate: true
+  xy: 761, 185
+  size: 64, 59
+  orig: 64, 64
+  offset: 0, 3
+  index: -1
 gift_box
   rotate: false
-  xy: 761, 185
+  xy: 822, 185
   size: 83, 59
   orig: 83, 59
   offset: 0, 0
   index: 1
+gift_box
+  rotate: false
+  xy: 907, 178
+  size: 83, 59
+  orig: 83, 59
+  offset: 0, 0
+  index: 2
 green_ornament
   rotate: false
   xy: 156, 225
@@ -67,14 +81,14 @@ red_ornament
   index: -1
 small_snow_globe
   rotate: true
-  xy: 400, 206
+  xy: 402, 206
   size: 34, 33
   orig: 34, 33
   offset: 0, 0
   index: -1
 snow_flake
   rotate: true
-  xy: 435, 206
+  xy: 437, 206
   size: 32, 31
   orig: 32, 32
   offset: 0, 1
@@ -86,9 +100,30 @@ snow_flake
   orig: 63, 64
   offset: 0, 0
   index: 2
-snowman_arm
+snowglobe_base
+  rotate: false
+  xy: 231, 225
+  size: 119, 23
+  orig: 129, 25
+  offset: 5, 1
+  index: -1
+snowglobe_top
   rotate: true
   xy: 1176, 137
+  size: 116, 112
+  orig: 116, 112
+  offset: 0, 0
+  index: -1
+snowglobe_top_mask
+  rotate: false
+  xy: 1290, 141
+  size: 114, 110
+  orig: 116, 112
+  offset: 1, 1
+  index: -1
+snowman_arm
+  rotate: false
+  xy: 1315, 2
   size: 109, 137
   orig: 109, 137
   offset: 0, 0
@@ -102,7 +137,7 @@ snowman_middle
   index: -1
 snowman_nose
   rotate: false
-  xy: 231, 225
+  xy: 470, 206
   size: 71, 19
   orig: 71, 19
   offset: 0, 0
@@ -116,7 +151,7 @@ snowman_tophat
   index: -1
 star
   rotate: false
-  xy: 350, 206
+  xy: 352, 206
   size: 48, 46
   orig: 48, 46
   offset: 0, 0

@@ -5,5 +5,4 @@ package com.monstergoboom.snowday.game;
  */
 public abstract class GameObject {
     abstract void setPosition(int x, int y);
-    abstract void setPosition(float x, float y);
 }
