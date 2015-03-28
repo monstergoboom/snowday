@@ -35,6 +35,9 @@ public class StaticGameObject {
     protected float animationRuntime;
     protected boolean hasAnimations;
     protected boolean hasBoundingBox;
+    protected short filterCategory;
+    protected short filterMask;
+    protected boolean isSensor;
 
     private Skeleton skeleton;
     private SkeletonRenderer skeletonRenderer;
@@ -47,7 +50,8 @@ public class StaticGameObject {
     private World world;
 
     public StaticGameObject(int x, int y, float drawScale,
-                            World b2World, Texture ta) {
+                            World b2World, Texture ta,
+                            int category, int mask, boolean sensor) {
         positionX = x;
         positionY = y;
         scale = drawScale;
@@ -67,12 +71,15 @@ public class StaticGameObject {
         animationState = null;
         textureAtlas = null;
         atlasRegion = null;
+        filterCategory = (short)category;
+        filterMask = (short)(mask);
+        isSensor = sensor;
     }
 
     public StaticGameObject(int x, int y, float drawScale,
                             String asset, String region, int index,
-                            World b2World, TextureAtlas ta)
-    {
+                            World b2World, TextureAtlas ta,
+                            int category, int mask, boolean sensor) {
         positionX = x;
         positionY = y;
         scale = drawScale;
@@ -94,12 +101,17 @@ public class StaticGameObject {
         animationState = null;
         texture = null;
 
+        filterCategory = (short)category;
+        filterMask = (short)(mask);
+        isSensor = sensor;
+
         LoadTexture();
     }
 
     public StaticGameObject(int x, int y, float drawScale,
                             World b2World,
-                            SkeletonData sd) {
+                            SkeletonData sd,
+                            int category, int mask, boolean sensor) {
         positionX = x;
         positionY = y;
         scale = drawScale;
@@ -119,6 +131,10 @@ public class StaticGameObject {
         textureAtlas = null;
         texture = null;
         atlasRegion = null;
+
+        filterCategory = (short)category;
+        filterMask = (short)(mask);
+        isSensor = sensor;
 
         LoadSkeleton();
     }
@@ -220,6 +236,9 @@ public class StaticGameObject {
         fixtureDef.shape = polygonShape;
         fixtureDef.restitution = 0.0f;
         fixtureDef.friction = 1.0f;
+        fixtureDef.filter.categoryBits = filterCategory;
+        fixtureDef.filter.maskBits = filterMask;
+        fixtureDef.filter.groupIndex = -1;
 
         body.createFixture(fixtureDef);
 

@@ -1,8 +1,5 @@
 package com.monstergoboom.snowday.game;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -11,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -28,15 +24,16 @@ import java.util.UUID;
 public abstract class Character extends GameObject implements IPhysicsComponent {
     private UUID id;
 
-    private Skeleton skeleton;
-    private SkeletonRenderer skeletonRenderer;
-    private SkeletonData skeletonData;
-    private AnimationState animationState;
+    protected Skeleton skeleton;
+    protected SkeletonRenderer skeletonRenderer;
+    protected SkeletonData skeletonData;
+    protected AnimationState animationState;
 
     protected int positionX;
     protected int positionY;
     protected float animationSpeed;
     protected float movementSpeed;
+    protected float movementDelta;
     protected float scale;
     protected String assetName;
     protected boolean hasBoundingBox;
@@ -45,13 +42,26 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     protected Body body;
     protected World world;
 
-    public Character(String assetNameParam, float drawScale, int x, int y, World b2World, SkeletonData sd) {
+    protected String movementState;
+    protected String movementStatePrevious;
+    protected int movementDirection;
+    protected boolean movementStateHasChanged;
+    protected float hangTime;
+    protected float hangTimeDelta;
+
+    protected short filterCategory;
+    protected short filterMask;
+
+    public Character(String assetNameParam, float drawScale, int x, int y,
+                     World b2World, SkeletonData sd,
+                     int category, int mask) {
         positionX = x;
         positionY = y;
         assetName = assetNameParam;
         id = UUID.randomUUID();
         animationSpeed = 1.0f;
-        movementSpeed = 1.0f;
+        movementSpeed = 0.01678f;
+        movementDelta = 0;
         scale = drawScale;
         hasBoundingBox = false;
         needsUpdate = true;
@@ -60,7 +70,29 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         skeletonData = sd;
         skeletonRenderer = new SkeletonRenderer();
 
+        movementState = "idle";
+        movementStateHasChanged = false;
+
+        filterCategory = (short)category;
+        filterMask = (short)(mask);
+
+        hangTime = .5f;
+        hangTimeDelta = 0;
+
         LoadSkeleton();
+    }
+
+    public void setMovementState(String value) {
+        if(!movementState.equalsIgnoreCase(value)) {
+            movementStatePrevious = movementState;
+            movementState = value;
+            movementStateHasChanged = true;
+            needsUpdate = true;
+        }
+    }
+
+    public void setMovementDirection(int direction) {
+        movementDirection = direction;
     }
 
     private void LoadSkeleton() {
@@ -76,10 +108,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
 
             animationState = new AnimationState(new AnimationStateData(skeletonData));
 
-            Animation animation = skeletonData.findAnimation("idle");
-            assert (animation != null);
-
-            animationState.setAnimation(0, animation, true);
+            animationState.setAnimation(0, "idle", true);
             animationState.setTimeScale(animationSpeed);
 
             SkeletonBounds bounds = new SkeletonBounds();
@@ -102,6 +131,8 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
             Vector2 position = HelperUtils.convertPixelsToUnits(positionX, positionY);
             bodyDef.position.set(position);
             bodyDef.fixedRotation = true;
+            bodyDef.linearDamping = 0f;
+            bodyDef.linearVelocity.y = -5f;
 
             body = world.createBody(bodyDef);
             body.setUserData(this);
@@ -115,7 +146,10 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         fixtureDef.shape = polygonShape;
         fixtureDef.restitution = 0.0f;
         fixtureDef.friction = 1.0f;
-        fixtureDef.density = 0.5f;
+        fixtureDef.density = 25f;
+        fixtureDef.filter.categoryBits = filterCategory;
+        fixtureDef.filter.maskBits = filterMask;
+        fixtureDef.filter.groupIndex = -1;
 
         body.createFixture(fixtureDef);
 
@@ -144,6 +178,54 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     }
 
     public void update(float delta) {
+        movementDelta += delta;
+
+        if(movementStateHasChanged) {
+            if(movementState == "jump") {
+                animationState.setAnimation(1, movementState, false);
+            }
+            else {
+                animationState.setAnimation(0, movementState, true);
+            }
+
+            movementStateHasChanged = false;
+        }
+
+        if(movementDelta > movementSpeed) {
+            Vector2 pos = HelperUtils.convertPixelsToUnits(positionX, positionY);
+            if (movementState == "idle") {
+                body.setLinearVelocity(0f, 0f);
+            } else if (movementState == "walk") {
+                if(movementDirection > 0) {
+                    body.setLinearVelocity(1.5f, 0f);
+                    skeleton.setFlipX(false);
+                }
+                else {
+                    body.setLinearVelocity(-1.5f, 0f);
+                    skeleton.setFlipX(true);
+                }
+            } else if (movementState == "jump") {
+                float x = 0.0f;
+                if(movementStatePrevious == "walk")
+                    if(movementDirection > 0)
+                        x = 1.f;
+                    else
+                        x = -1.5f;
+
+                hangTimeDelta += delta;
+                float y = .75f;
+                if(hangTimeDelta >= hangTime) {
+                    y = -5f;
+                    hangTimeDelta = 0;
+                    setMovementState(movementStatePrevious);
+                }
+
+                body.setLinearVelocity(x, y);
+            }
+
+            movementDelta = 0;
+        }
+
         animationState.update(delta);
         animationState.apply(skeleton);
 
@@ -158,7 +240,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
 
     abstract void attack();
     abstract void run();
-    abstract void walk();
+    abstract void walk(int direction);
     abstract void jump();
     abstract void idle();
     abstract void die();

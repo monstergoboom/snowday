@@ -8,7 +8,7 @@ import com.esotericsoftware.spine.SkeletonData;
  */
 public class NonPlayerCharacter extends Character {
     public NonPlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd) {
-        super(assetName, scale, x, y, b2World, sd);
+        super(assetName, scale, x, y, b2World, sd, (short)0x0008, (short)0x0000);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class NonPlayerCharacter extends Character {
     }
 
     @Override
-    void walk() {
+    void walk(int direction) {
 
     }
 

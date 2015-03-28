@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 
 public class SnowDay extends ApplicationAdapter{
     private PolygonSpriteBatch spriteBatch;
@@ -20,9 +22,11 @@ public class SnowDay extends ApplicationAdapter{
     private SnowDayAssetManager snowDayAssetManager;
 
     private SantaClause santaClause;
+/*
     private Elf elf;
     private Snowman snowman;
     private Reindeer reindeer;
+*/
     private SnowGround snowGround;
     private Background background;
     private SnowflakeGenerator snowflakeGenerator;
@@ -31,6 +35,9 @@ public class SnowDay extends ApplicationAdapter{
 
     private RedOrnamentBullet bullet;
     private float bulletTime = 0.0f;
+
+    private Controller controller;
+    private PlayerControllerListener playerControllerListener;
 
     public void setup() {
         fontCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -57,15 +64,19 @@ public class SnowDay extends ApplicationAdapter{
         background = new Background("backdrop_1", physicsSystem.getWorld(),
                 snowDayAssetManager.getTexture("backdrop_1"));
 
-        santaClause = new SantaClause(100, 100, physicsSystem.getWorld(),
+        santaClause = new SantaClause(75, 100, physicsSystem.getWorld(),
                 snowDayAssetManager.getSkeletonData("santa"));
+
+/*
         elf = new Elf(400, 100, physicsSystem.getWorld(),
                 snowDayAssetManager);
+
         snowman = new Snowman(600,100, physicsSystem.getWorld(),
                 snowDayAssetManager.getSkeletonData("snowman"));
+
         reindeer = new Reindeer(700, 100, physicsSystem.getWorld(),
                 snowDayAssetManager.getSkeletonData("reindeer"));
-
+*/
         tree1 = new ChristmasTree(1200, 75, physicsSystem.getWorld(),
                 snowDayAssetManager);
 
@@ -83,8 +94,18 @@ public class SnowDay extends ApplicationAdapter{
         snowflakeGenerator.start();
 
         playerHud = new PlayerHud(snowDayAssetManager);
+        /*
         bullet = new RedOrnamentBullet(300, 1200, physicsSystem.getWorld(),
                 snowDayAssetManager);
+        */
+
+        controller = Controllers.getControllers().first();
+        if (controller != null) {
+            controller = Controllers.getControllers().get(0);
+
+            playerControllerListener = new PlayerControllerListener(santaClause);
+            playerControllerListener.register(controller);
+        }
     }
 
     public void load() {
@@ -96,20 +117,15 @@ public class SnowDay extends ApplicationAdapter{
         spriteBatch.begin();
 
         background.draw(spriteBatch);
-
         snowGround.draw(spriteBatch);
         tree1.draw(spriteBatch);
-
         santaClause.draw(spriteBatch);
-        elf.draw(spriteBatch);
-        snowman.draw(spriteBatch);
-        reindeer.draw(spriteBatch);
-
+        // elf.draw(spriteBatch);
+        // snowman.draw(spriteBatch);
+        // reindeer.draw(spriteBatch);
         snowflakeGenerator.draw(spriteBatch);
-
         playerHud.draw(spriteBatch);
-
-        bullet.draw(spriteBatch);
+        // bullet.draw(spriteBatch);
 
         spriteBatch.end();
 
@@ -126,19 +142,21 @@ public class SnowDay extends ApplicationAdapter{
 
         background.update(animationDelta);
         santaClause.update(animationDelta);
-        elf.update(animationDelta);
-        snowman.update(animationDelta);
-        reindeer.update(animationDelta);
+        // elf.update(animationDelta);
+        // snowman.update(animationDelta);
+        // reindeer.update(animationDelta);
         snowGround.update(animationDelta);
         tree1.update(animationDelta);
         playerHud.update(animationDelta);
         snowflakeGenerator.update(animationDelta);
-        bullet.update(animationDelta);
+        // bullet.update(animationDelta);
 
+        /*
         if(bulletTime > 5) {
             bullet.shoot(0.00001f,0.01f);
             bulletTime = 0f;
         }
+        */
     }
 
     @Override

@@ -56,6 +56,9 @@ public class Ground {
     private Array<AtlasRegion> regionArray;
     private Array<AtlasRegion> drawableRegionArray;
 
+    protected short filterCategory;
+    protected short filterMask;
+
     public static class GroundDef {
         public int positionIndex;
         public int atlasIndex;
@@ -100,6 +103,9 @@ public class Ground {
         assetManager = new AssetManager(new InternalFileHandleResolver());
         textureAtlasLoader = new TextureAtlasLoader(new InternalFileHandleResolver());
 
+        filterCategory = (short)0x0001;
+        filterMask = (short)0xffff;
+
         LoadTextureAtlas();
         LoadBoxingDefinition();
         SetFixtures();
@@ -122,11 +128,11 @@ public class Ground {
             for(GroundDef def: groundDefs) {
                 AtlasBoxing.AtlasBox box = boxingDef.get(assetName, def.atlasIndex);
                 if(box!=null) {
-                    Vector2 xy = HelperUtils.convertPixelsToUnits(def.startLocation, box.y);
-                    Vector2 dxdy = HelperUtils.convertPixelsToUnits(def.endLocation, box.y);
+                    Vector2 xy = HelperUtils.convertPixelsToUnits(def.startLocation - 1, box.y);
+                    Vector2 dx_dy = HelperUtils.convertPixelsToUnits(def.endLocation + 1, box.y);
 
                     vertices.add(xy);
-                    vertices.add(dxdy);
+                    vertices.add(dx_dy);
                 }
             }
 
@@ -139,6 +145,8 @@ public class Ground {
             fixtureDef.friction = 1.0f;
             fixtureDef.restitution = 0.0f;
             fixtureDef.shape = chainShape;
+            fixtureDef.filter.categoryBits = filterCategory;
+            fixtureDef.filter.maskBits = filterMask;
 
             body.createFixture(fixtureDef);
             chainShape.dispose();
