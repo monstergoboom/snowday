@@ -31,8 +31,10 @@ public class PlayerCharacter extends Character {
 
     @Override
     void jump() {
-        Gdx.app.log("PlayerCharacter", "jumping");
-        setMovementState("jump");
+        if(!isJumping()) {
+            Gdx.app.log("PlayerCharacter", "jumping");
+            setMovementState("jump");
+        }
     }
 
     @Override

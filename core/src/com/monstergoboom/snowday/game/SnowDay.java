@@ -11,6 +11,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.utils.Array;
 
 public class SnowDay extends ApplicationAdapter{
     private PolygonSpriteBatch spriteBatch;
@@ -99,12 +100,18 @@ public class SnowDay extends ApplicationAdapter{
                 snowDayAssetManager);
         */
 
-        controller = Controllers.getControllers().first();
-        if (controller != null) {
-            controller = Controllers.getControllers().get(0);
+        Array<Controller> a = Controllers.getControllers();
+        if (a.size > 0) {
+            controller = Controllers.getControllers().first();
+            if (controller != null) {
+                controller = Controllers.getControllers().get(0);
 
-            playerControllerListener = new PlayerControllerListener(santaClause);
-            playerControllerListener.register(controller);
+                playerControllerListener = new PlayerControllerListener(santaClause);
+                playerControllerListener.register(controller);
+            }
+        }
+        else {
+            Gdx.app.log("Controllers", "no controllers attached to device");
         }
     }
 

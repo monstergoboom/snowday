@@ -1,5 +1,6 @@
 package com.monstergoboom.snowday.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -158,6 +159,26 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         hasBoundingBox = true;
     }
 
+    public boolean isJumping() {
+        return (movementState == "jump");
+    }
+
+    public boolean isWalking() {
+        return (movementState == "walk");
+    }
+
+    public boolean isRunning() {
+        return (movementState == "run");
+    }
+
+    public boolean isAttacking() {
+        return (movementState == "attack");
+    }
+
+    public boolean isIdle() {
+        return (movementState == "idle");
+    }
+
     public UUID getId() {
         return id;
     }
@@ -173,22 +194,40 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     }
 
     public void setBodyPosition(float x, float y, float r) {
-        skeleton.setPosition(x,y);
+        skeleton.setPosition(x, y);
         needsUpdate = true;
     }
 
     public void update(float delta) {
+
         movementDelta += delta;
 
         if(movementStateHasChanged) {
-            if(movementState == "jump") {
-                animationState.setAnimation(1, movementState, false);
-            }
-            else {
-                animationState.setAnimation(0, movementState, true);
+            animationState.setAnimation(0, movementState, true);
+
+            boolean loop = true;
+            boolean hasAnimation = true;
+            String animationName = movementState;
+
+            switch (movementState) {
+                case "jump":
+                    loop = true;
+                    break;
+                case "walk":
+                    break;
+                case "run":
+                    break;
+                case "attack":
+                    break;
+                default:
+                    Gdx.app.log("PlayerController", "movementstate not supported: " + movementState);
+                    hasAnimation = false;
+                    break;
             }
 
-            movementStateHasChanged = false;
+            if(hasAnimation) {
+                animationState.setAnimation(0, animationName, loop);
+            }
         }
 
         if(movementDelta > movementSpeed) {
