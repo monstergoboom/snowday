@@ -32,6 +32,8 @@ public class PhysicsSystem {
         debug = debugFlag;
 
         configureDebug();
+
+        world.setContactListener(new ContactSystemListener());
     }
 
     public World getWorld() {

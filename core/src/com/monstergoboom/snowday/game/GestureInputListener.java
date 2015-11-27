@@ -8,6 +8,11 @@ import com.badlogic.gdx.math.Vector2;
  * Created by amitrevski on 1/11/15.
  */
 public class GestureInputListener implements GestureDetector.GestureListener {
+    private PlayerCharacter playerCharacter;
+
+    public GestureInputListener(PlayerCharacter pc) {
+        playerCharacter = pc;
+    }
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
@@ -32,6 +37,13 @@ public class GestureInputListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
+
+        Gdx.app.log("gesture listener", "fling x: " + velocityX + ", fling y: " + velocityY + ", button: " + button);
+
+        if (velocityX > 0 )
+            playerCharacter.walk(1);
+        else
+            playerCharacter.walk(-1);
 
         return false;
     }

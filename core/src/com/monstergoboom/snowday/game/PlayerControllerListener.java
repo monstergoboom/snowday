@@ -42,14 +42,22 @@ public class PlayerControllerListener implements ControllerListener {
     public boolean buttonDown(Controller controller, int buttonCode) {
         Gdx.app.log("PlayerControllerListener", "Button Down: " + buttonCode);
 
+        // Movement
         if(buttonCode == MOVE_LEFT) {
             playerCharacter.walk(-1);
         }
         else if (buttonCode == MOVE_RIGHT) {
             playerCharacter.walk(1);
         }
-        else if (buttonCode == JUMP) {
+
+        // Actions
+        if (buttonCode == JUMP) {
             playerCharacter.jump();
+        }
+
+        // Combat
+        if (buttonCode == ATTACK) {
+            playerCharacter.attack();
         }
 
         return false;
@@ -57,7 +65,7 @@ public class PlayerControllerListener implements ControllerListener {
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
-        if( buttonCode == 19 || buttonCode == 20 || buttonCode == 21 || buttonCode == 22)
+        if( buttonCode == MOVE_LEFT || buttonCode == MOVE_RIGHT )
             playerCharacter.idle();
 
         return false;

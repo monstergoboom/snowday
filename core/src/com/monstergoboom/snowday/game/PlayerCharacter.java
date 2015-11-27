@@ -31,10 +31,15 @@ public class PlayerCharacter extends Character {
 
     @Override
     void jump() {
-        if(!isJumping()) {
+        if(!isJumping() && hasGroundContact()) {
             Gdx.app.log("PlayerCharacter", "jumping");
-            setMovementState("jump");
+            setMovementActionState("jump");
         }
+    }
+
+    @Override
+    void doubleJump() {
+
     }
 
     @Override

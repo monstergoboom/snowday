@@ -47,11 +47,18 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     protected String movementStatePrevious;
     protected int movementDirection;
     protected boolean movementStateHasChanged;
+
+    protected String movementActionState;
+    protected String movementActionStatePrevious;
+    protected boolean movementActionStateHasChanged;
+
     protected float hangTime;
     protected float hangTimeDelta;
 
     protected short filterCategory;
     protected short filterMask;
+
+    protected boolean hasContact;
 
     public Character(String assetNameParam, float drawScale, int x, int y,
                      World b2World, SkeletonData sd,
@@ -71,7 +78,12 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         skeletonData = sd;
         skeletonRenderer = new SkeletonRenderer();
 
+        movementActionState = "idle";
+        movementActionStateHasChanged = false;
+        movementActionStatePrevious = "idle";
+
         movementState = "idle";
+        movementStatePrevious = "idle";
         movementStateHasChanged = false;
 
         filterCategory = (short)category;
@@ -80,7 +92,22 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         hangTime = .5f;
         hangTimeDelta = 0;
 
+        hasContact = false;
+
         LoadSkeleton();
+    }
+    public boolean hasGroundContact() {
+        return hasContact;
+    }
+
+    public void beginContact() {
+        Gdx.app.log("Character", "start contact");
+        hasContact = true;
+    }
+
+    public void endContact() {
+        Gdx.app.log("Character", "end contact");
+        hasContact = false;
     }
 
     public void setMovementState(String value) {
@@ -94,6 +121,15 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
 
     public void setMovementDirection(int direction) {
         movementDirection = direction;
+    }
+
+    public void setMovementActionState(String value) {
+        if (!movementActionState.equalsIgnoreCase(value)) {
+            movementActionStatePrevious = movementActionState;
+            movementActionState = value;
+            movementActionStateHasChanged = true;
+            needsUpdate = true;
+        }
     }
 
     private void LoadSkeleton() {
@@ -123,8 +159,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         }
     }
 
-    public void createBoundingBox(Vector2[] vertices)
-    {
+    public void createBoundingBox(Vector2[] vertices) {
         if(body == null) {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -153,6 +188,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         fixtureDef.filter.groupIndex = -1;
 
         body.createFixture(fixtureDef);
+        body.setUserData(this);
 
         polygonShape.dispose();
 
@@ -160,7 +196,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     }
 
     public boolean isJumping() {
-        return (movementState == "jump");
+        return (movementActionState == "jump");
     }
 
     public boolean isWalking() {
@@ -204,71 +240,50 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
 
         if(movementStateHasChanged) {
             animationState.setAnimation(0, movementState, true);
+            animationState.apply(skeleton);
 
-            boolean loop = true;
-            boolean hasAnimation = true;
-            String animationName = movementState;
+            movementStateHasChanged = false;
+        }
+        else {
+            if (movementDelta > movementSpeed) {
+                if (isWalking()) {
+                    Vector2 v = body.getLinearVelocity();
 
-            switch (movementState) {
-                case "jump":
-                    loop = true;
-                    break;
-                case "walk":
-                    break;
-                case "run":
-                    break;
-                case "attack":
-                    break;
-                default:
-                    Gdx.app.log("PlayerController", "movementstate not supported: " + movementState);
-                    hasAnimation = false;
-                    break;
-            }
+                    if (movementDirection < 0) {
+                        if (!skeleton.getFlipX())
+                            skeleton.setFlipX(true);
+                        v.x = -1;
+                    } else {
+                        if (skeleton.getFlipX())
+                            skeleton.setFlipX(false);
+                        v.x = 1;
+                    }
 
-            if(hasAnimation) {
-                animationState.setAnimation(0, animationName, loop);
+                    body.setLinearVelocity(v);
+                }
+
+                if (isJumping()) {
+                    Vector2 v = body.getLinearVelocity();
+
+                    float desired = 4;
+                    float velChange = desired + v.y;
+
+                    float impulse = body.getMass() * velChange;
+                    Vector2 c = body.getWorldCenter();
+                    body.applyLinearImpulse(new Vector2(0, impulse), c, true);
+
+                    setMovementActionState("idle");
+                }
+
+                Vector2 pos = HelperUtils.convertPixelsToUnits(positionX, positionY);
+
+                animationState.update(movementDelta);
+                animationState.apply(skeleton);
+                skeleton.updateWorldTransform();
+
+                movementDelta = 0;
             }
         }
-
-        if(movementDelta > movementSpeed) {
-            Vector2 pos = HelperUtils.convertPixelsToUnits(positionX, positionY);
-            if (movementState == "idle") {
-                body.setLinearVelocity(0f, 0f);
-            } else if (movementState == "walk") {
-                if(movementDirection > 0) {
-                    body.setLinearVelocity(1.5f, 0f);
-                    skeleton.setFlipX(false);
-                }
-                else {
-                    body.setLinearVelocity(-1.5f, 0f);
-                    skeleton.setFlipX(true);
-                }
-            } else if (movementState == "jump") {
-                float x = 0.0f;
-                if(movementStatePrevious == "walk")
-                    if(movementDirection > 0)
-                        x = 1.f;
-                    else
-                        x = -1.5f;
-
-                hangTimeDelta += delta;
-                float y = .75f;
-                if(hangTimeDelta >= hangTime) {
-                    y = -5f;
-                    hangTimeDelta = 0;
-                    setMovementState(movementStatePrevious);
-                }
-
-                body.setLinearVelocity(x, y);
-            }
-
-            movementDelta = 0;
-        }
-
-        animationState.update(delta);
-        animationState.apply(skeleton);
-
-        skeleton.updateWorldTransform();
 
         needsUpdate = false;
     }
@@ -281,6 +296,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     abstract void run();
     abstract void walk(int direction);
     abstract void jump();
+    abstract void doubleJump();
     abstract void idle();
     abstract void die();
 

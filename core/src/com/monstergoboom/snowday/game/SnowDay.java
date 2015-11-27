@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.input.GestureDetector;
 
 public class SnowDay extends ApplicationAdapter{
     private PolygonSpriteBatch spriteBatch;
@@ -58,7 +59,7 @@ public class SnowDay extends ApplicationAdapter{
 
         physicsSystem = new PhysicsSystem(camera, false);
 
-        Gdx.input.setInputProcessor(new GestureDetector(new GestureInputListener()));
+        Gdx.input.setInputProcessor(new GestureDetector(new GestureInputListener(santaClause)));
     }
 
     public void initialize() {
@@ -95,12 +96,12 @@ public class SnowDay extends ApplicationAdapter{
         snowflakeGenerator.start();
 
         playerHud = new PlayerHud(snowDayAssetManager);
-        /*
+
         bullet = new RedOrnamentBullet(300, 1200, physicsSystem.getWorld(),
                 snowDayAssetManager);
-        */
 
         Array<Controller> a = Controllers.getControllers();
+
         if (a.size > 0) {
             controller = Controllers.getControllers().first();
             if (controller != null) {
@@ -111,6 +112,7 @@ public class SnowDay extends ApplicationAdapter{
             }
         }
         else {
+            Gdx.input.setInputProcessor(new GestureDetector(new GestureInputListener(santaClause)));
             Gdx.app.log("Controllers", "no controllers attached to device");
         }
     }
@@ -132,7 +134,7 @@ public class SnowDay extends ApplicationAdapter{
         // reindeer.draw(spriteBatch);
         snowflakeGenerator.draw(spriteBatch);
         playerHud.draw(spriteBatch);
-        // bullet.draw(spriteBatch);
+        bullet.draw(spriteBatch);
 
         spriteBatch.end();
 
@@ -156,7 +158,7 @@ public class SnowDay extends ApplicationAdapter{
         tree1.update(animationDelta);
         playerHud.update(animationDelta);
         snowflakeGenerator.update(animationDelta);
-        // bullet.update(animationDelta);
+        bullet.update(animationDelta);
 
         /*
         if(bulletTime > 5) {

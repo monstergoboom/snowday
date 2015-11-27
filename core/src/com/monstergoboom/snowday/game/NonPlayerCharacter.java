@@ -32,6 +32,11 @@ public class NonPlayerCharacter extends Character {
     }
 
     @Override
+    void doubleJump() {
+
+    }
+
+    @Override
     void idle() {
 
     }
