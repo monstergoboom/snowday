@@ -5,7 +5,7 @@ package com.monstergoboom.snowday.game;
  */
 public class RedGiftBox extends GiftBox {
     public RedGiftBox(int positionX, int positionY, SnowDayAssetManager asm) {
-        super(positionX, positionY, 1.0f, "gift_box", 1, "gift_box", 2,
+        super(positionX, positionY, 1.0f, "gift_box", "environment",  "gift_box", 1, "gift_box", 2,
                 asm.getTextureAtlas("misc"));
     }
 }

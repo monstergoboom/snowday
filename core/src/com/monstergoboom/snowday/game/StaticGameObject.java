@@ -22,7 +22,7 @@ import com.esotericsoftware.spine.attachments.BoundingBoxAttachment;
 /**
  * Created by amitrevski on 12/23/14.
  */
-public class StaticGameObject {
+public class StaticGameObject extends GameObject {
     protected int positionX;
     protected int positionY;
     protected String assetName;
@@ -50,8 +50,11 @@ public class StaticGameObject {
     private World world;
 
     public StaticGameObject(int x, int y, float drawScale,
+                            String gameObjectName, String gameObjectCategory,
                             World b2World, Texture ta,
                             int category, int mask, boolean sensor) {
+        super(gameObjectName, gameObjectCategory);
+
         positionX = x;
         positionY = y;
         scale = drawScale;
@@ -77,9 +80,12 @@ public class StaticGameObject {
     }
 
     public StaticGameObject(int x, int y, float drawScale,
+                            String gameObjectName, String gameObjectCategory,
                             String asset, String region, int index,
                             World b2World, TextureAtlas ta,
                             int category, int mask, boolean sensor) {
+        super(gameObjectName, gameObjectCategory);
+
         positionX = x;
         positionY = y;
         scale = drawScale;
@@ -109,9 +115,12 @@ public class StaticGameObject {
     }
 
     public StaticGameObject(int x, int y, float drawScale,
+                            String gameObjectName, String gameObjectCategory,
                             World b2World,
                             SkeletonData sd,
                             int category, int mask, boolean sensor) {
+        super(gameObjectName, gameObjectCategory);
+
         positionX = x;
         positionY = y;
         scale = drawScale;
@@ -154,6 +163,16 @@ public class StaticGameObject {
         positionY = y;
 
         needsUpdate = true;
+    }
+
+    @Override
+    public void beginContact(GameObject contactWith) {
+
+    }
+
+    @Override
+    public void endContact(GameObject contactWith) {
+
     }
 
     public void setPositionX(int value) {

@@ -1,7 +1,6 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -13,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
@@ -25,7 +21,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Created by amitrevski on 12/23/14.
  */
-public class Ground {
+public class Ground extends GameObject {
     protected int overlapOffset;
     protected String assetName;
     protected boolean loopIndex;
@@ -49,7 +45,6 @@ public class Ground {
     protected World world;
     protected BodyDef bodyDef;
     protected Body body;
-    protected Fixture groundSensor;
     protected AtlasBoxing.AtlasBoxDef boxingDef;
 
     private AssetManager assetManager;
@@ -60,6 +55,22 @@ public class Ground {
 
     protected short filterCategory;
     protected short filterMask;
+
+    @Override
+    public void setPosition(int x, int y) {
+        positionX = x;
+        positionY = y;
+    }
+
+    @Override
+    public void beginContact(GameObject contactWith) {
+
+    }
+
+    @Override
+    public void endContact(GameObject contactWith) {
+
+    }
 
     public static class GroundDef {
         public int positionIndex;
@@ -78,6 +89,8 @@ public class Ground {
     private Array<GroundDef> groundDefs;
 
     public Ground(String name, World b2dWorld) {
+        super(name, "platform");
+
         overlapOffset = 0;
         assetName = name;
         loopIndex = true;

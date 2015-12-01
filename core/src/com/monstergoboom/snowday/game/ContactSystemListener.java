@@ -12,23 +12,56 @@ public class ContactSystemListener implements ContactListener {
     @Override
     public void beginContact(Contact contact) {
 
+        Object fixtureA = contact.getFixtureA().getBody().getUserData();
+
+        GameObject gameObjectA = null;
+        GameObject gameObjectB = null;
+
+        if (fixtureA != null) {
+            if (fixtureA instanceof GameObject) {
+                gameObjectA = ((GameObject) fixtureA);
+            }
+        }
+
         Object fixtureB = contact.getFixtureB().getBody().getUserData();
 
         if (fixtureB != null) {
-            if (fixtureB instanceof Character) {
-                ((Character) fixtureB).beginContact();
+            if (fixtureB instanceof GameObject) {
+                gameObjectB = ((GameObject) fixtureB);
             }
+        }
+
+        if (gameObjectA != null && gameObjectB != null) {
+            gameObjectA.beginContact(gameObjectB);
+            gameObjectB.beginContact(gameObjectA);
         }
     }
 
     @Override
     public void endContact(Contact contact) {
+
+        Object fixtureA = contact.getFixtureA().getBody().getUserData();
+
+        GameObject gameObjectA = null;
+        GameObject gameObjectB = null;
+
+        if (fixtureA != null) {
+            if (fixtureA instanceof GameObject) {
+                gameObjectA = ((GameObject) fixtureA);
+            }
+        }
+
         Object fixtureB = contact.getFixtureB().getBody().getUserData();
 
         if (fixtureB != null) {
-            if (fixtureB instanceof Character) {
-                ((Character) fixtureB).endContact();
+            if (fixtureB instanceof GameObject) {
+                gameObjectB = ((GameObject) fixtureB);
             }
+        }
+
+        if (gameObjectA != null && gameObjectB != null) {
+            gameObjectA.endContact(gameObjectB);
+            gameObjectB.endContact(gameObjectA);
         }
     }
 

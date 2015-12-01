@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 /**
  * Created by amitrevski on 12/30/14.
  */
-public class GiftBox  {
+public class GiftBox extends GameObject {
     private int x;
     private int y;
     private float scale;
@@ -26,9 +26,12 @@ public class GiftBox  {
 
     public GiftBox(int positionX, int positionY,
                    float objectScale,
+                   String gameObjectName, String gameObjectCategory,
                    String onRegionName, int onRegionIndex,
                    String offRegionName, int offRegionIndex,
                    TextureAtlas ta) {
+        super(gameObjectName, gameObjectCategory);
+
         x = positionX;
         y = positionY;
         scale = objectScale;
@@ -95,5 +98,20 @@ public class GiftBox  {
         else {
             spriteOff.draw(batch);
         }
+    }
+
+    @Override
+    public void setPosition(int x, int y) {
+
+    }
+
+    @Override
+    public void beginContact(GameObject contactWith) {
+
+    }
+
+    @Override
+    public void endContact(GameObject contactWith) {
+
     }
 }

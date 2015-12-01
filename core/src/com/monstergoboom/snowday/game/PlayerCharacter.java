@@ -9,17 +9,19 @@ import com.esotericsoftware.spine.SkeletonData;
  */
 public class PlayerCharacter extends Character {
     public PlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd) {
-        super(assetName, scale, x, y, b2World, sd, 0x0002, 0xffff & ~0x0004);
+        super(assetName, scale, x, y, "player_character", "character", b2World, sd, 0x0002, 0xffff & ~0x0004);
     }
 
     @Override
     void attack() {
-
+        Gdx.app.log("PlayerCharacter", "attacking");
+        setMovementCombatState("attack");
     }
 
     @Override
     void run() {
-
+        Gdx.app.log("PlayerCharacter", "running");
+        setMovementState("run");
     }
 
     @Override

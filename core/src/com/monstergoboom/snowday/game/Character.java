@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -29,6 +30,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     protected SkeletonRenderer skeletonRenderer;
     protected SkeletonData skeletonData;
     protected AnimationState animationState;
+    protected AnimationState animationCombatState;
 
     protected int positionX;
     protected int positionY;
@@ -52,17 +54,30 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     protected String movementActionStatePrevious;
     protected boolean movementActionStateHasChanged;
 
+    protected String movementCombatState;
+    protected String movementCombatStatePrevious;
+    protected boolean movementCombatStateHasChanged;
+
     protected float hangTime;
     protected float hangTimeDelta;
 
     protected short filterCategory;
     protected short filterMask;
 
-    protected boolean hasContact;
+    protected int hasGroundContactCounter;
+
+    protected int maxHealth;
+    protected int currentHealth;
+    protected int maxMagic;
+    protected int currentMagic;
 
     public Character(String assetNameParam, float drawScale, int x, int y,
+                     String gameObjectName, String gameObjectCategory,
                      World b2World, SkeletonData sd,
                      int category, int mask) {
+
+        super(gameObjectName, gameObjectCategory);
+
         positionX = x;
         positionY = y;
         assetName = assetNameParam;
@@ -77,6 +92,8 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         world = b2World;
         skeletonData = sd;
         skeletonRenderer = new SkeletonRenderer();
+        animationCombatState = null;
+        animationState = null;
 
         movementActionState = "idle";
         movementActionStateHasChanged = false;
@@ -86,28 +103,60 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         movementStatePrevious = "idle";
         movementStateHasChanged = false;
 
+        movementCombatState = "idle";
+        movementCombatStatePrevious = "idle";
+        movementCombatStateHasChanged = false;
+
         filterCategory = (short)category;
         filterMask = (short)(mask);
 
         hangTime = .5f;
         hangTimeDelta = 0;
 
-        hasContact = false;
+        hasGroundContactCounter = 0;
 
         LoadSkeleton();
     }
+
     public boolean hasGroundContact() {
-        return hasContact;
+        return hasGroundContactCounter > 0;
     }
 
-    public void beginContact() {
-        Gdx.app.log("Character", "start contact");
-        hasContact = true;
+    public void beginContact(GameObject contactWith) {
+
+        if (contactWith.getReferenceCategory() == "platform") {
+            hasGroundContactCounter += 1;
+        }
+
+        Gdx.app.log("Character",
+                String.format("start contact with %s, counter: %d", contactWith.getReferenceName(),
+                        hasGroundContactCounter));
     }
 
-    public void endContact() {
-        Gdx.app.log("Character", "end contact");
-        hasContact = false;
+    public void endContact(GameObject contactWith) {
+        if (contactWith.getReferenceCategory() == "platform") {
+            hasGroundContactCounter -= 1;
+        }
+
+        Gdx.app.log("Character",
+                String.format("end contact with %s, counter: %d", contactWith.getReferenceName(),
+                        hasGroundContactCounter));
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public int getMaxMagic() {
+        return maxMagic;
+    }
+
+    public int getCurrentMagic() {
+        return currentMagic;
     }
 
     public void setMovementState(String value) {
@@ -132,6 +181,15 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         }
     }
 
+    public void setMovementCombatState(String value) {
+        if (!movementCombatState.equalsIgnoreCase(value)) {
+            movementCombatStatePrevious = movementCombatState;
+            movementCombatState = value;
+            movementCombatStateHasChanged = true;
+            needsUpdate = true;
+        }
+    }
+
     private void LoadSkeleton() {
         if(skeletonData != null ) {
             skeleton = new Skeleton(skeletonData);
@@ -144,6 +202,13 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
             skeleton.updateWorldTransform();
 
             animationState = new AnimationState(new AnimationStateData(skeletonData));
+            animationCombatState = new AnimationState(new AnimationStateData(skeletonData));
+
+            Animation attackAnimation = skeletonData.findAnimation("attack");
+            if (attackAnimation != null) {
+                animationCombatState.setAnimation(0, attackAnimation, true);
+                animationCombatState.setTimeScale(animationSpeed);
+            }
 
             animationState.setAnimation(0, "idle", true);
             animationState.setTimeScale(animationSpeed);
@@ -208,7 +273,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     }
 
     public boolean isAttacking() {
-        return (movementState == "attack");
+        return (movementCombatState == "attack");
     }
 
     public boolean isIdle() {
@@ -247,6 +312,8 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         else {
             if (movementDelta > movementSpeed) {
                 if (isWalking()) {
+                    //animationState.setAnimation(0, movementState, true);
+
                     Vector2 v = body.getLinearVelocity();
 
                     if (movementDirection < 0) {
@@ -273,6 +340,19 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
                     body.applyLinearImpulse(new Vector2(0, impulse), c, true);
 
                     setMovementActionState("idle");
+                    movementActionStateHasChanged = false;
+                }
+
+                if (isAttacking()) {
+                    if (animationCombatState != null) {
+
+                        Animation a = skeletonData.findAnimation("attack");
+                        if (a != null )
+                            animationState.addAnimation(1, a, false, 2);
+
+                        movementCombatStateHasChanged = false;
+                        setMovementCombatState("idle");
+                    }
                 }
 
                 Vector2 pos = HelperUtils.convertPixelsToUnits(positionX, positionY);

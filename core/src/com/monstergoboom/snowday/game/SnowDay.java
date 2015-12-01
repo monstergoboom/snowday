@@ -24,11 +24,11 @@ public class SnowDay extends ApplicationAdapter{
     private SnowDayAssetManager snowDayAssetManager;
 
     private SantaClause santaClause;
-/*
+
     private Elf elf;
     private Snowman snowman;
     private Reindeer reindeer;
-*/
+
     private SnowGround snowGround;
     private Background background;
     private SnowflakeGenerator snowflakeGenerator;
@@ -58,8 +58,6 @@ public class SnowDay extends ApplicationAdapter{
         spriteBatch.setProjectionMatrix(camera.combined);
 
         physicsSystem = new PhysicsSystem(camera, false);
-
-        Gdx.input.setInputProcessor(new GestureDetector(new GestureInputListener(santaClause)));
     }
 
     public void initialize() {
@@ -69,7 +67,7 @@ public class SnowDay extends ApplicationAdapter{
         santaClause = new SantaClause(75, 100, physicsSystem.getWorld(),
                 snowDayAssetManager.getSkeletonData("santa"));
 
-/*
+
         elf = new Elf(400, 100, physicsSystem.getWorld(),
                 snowDayAssetManager);
 
@@ -78,7 +76,7 @@ public class SnowDay extends ApplicationAdapter{
 
         reindeer = new Reindeer(700, 100, physicsSystem.getWorld(),
                 snowDayAssetManager.getSkeletonData("reindeer"));
-*/
+
         tree1 = new ChristmasTree(1200, 75, physicsSystem.getWorld(),
                 snowDayAssetManager);
 
@@ -129,9 +127,9 @@ public class SnowDay extends ApplicationAdapter{
         snowGround.draw(spriteBatch);
         tree1.draw(spriteBatch);
         santaClause.draw(spriteBatch);
-        // elf.draw(spriteBatch);
-        // snowman.draw(spriteBatch);
-        // reindeer.draw(spriteBatch);
+        elf.draw(spriteBatch);
+        snowman.draw(spriteBatch);
+        reindeer.draw(spriteBatch);
         snowflakeGenerator.draw(spriteBatch);
         playerHud.draw(spriteBatch);
         bullet.draw(spriteBatch);
@@ -151,9 +149,9 @@ public class SnowDay extends ApplicationAdapter{
 
         background.update(animationDelta);
         santaClause.update(animationDelta);
-        // elf.update(animationDelta);
-        // snowman.update(animationDelta);
-        // reindeer.update(animationDelta);
+        elf.update(animationDelta);
+        snowman.update(animationDelta);
+        reindeer.update(animationDelta);
         snowGround.update(animationDelta);
         tree1.update(animationDelta);
         playerHud.update(animationDelta);

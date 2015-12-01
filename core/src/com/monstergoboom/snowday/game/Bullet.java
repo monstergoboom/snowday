@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Created by amitrevski on 1/5/15.
  */
-public class Bullet implements IPhysicsComponent {
+public abstract class Bullet extends GameObject implements IPhysicsComponent {
     protected int x;
     protected int y;
     protected int width;
@@ -31,7 +31,9 @@ public class Bullet implements IPhysicsComponent {
 
     Sprite sprite;
 
-    public Bullet(int posX, int posY, String regionName, int regionIndex, World w, TextureAtlas ta) {
+    public Bullet(int posX, int posY, String gameObjectName, String gameObjectCategory, String regionName, int regionIndex, World w, TextureAtlas ta) {
+        super(gameObjectName, gameObjectCategory);
+
         x = posX;
         y = posY;
         world = w;
@@ -54,7 +56,9 @@ public class Bullet implements IPhysicsComponent {
         needsUpdate = true;
     }
 
-    public Bullet(int posX, int posY, World w, Texture t) {
+    public Bullet(int posX, int posY, String gameObjectName, String gameObjectCategory, World w, Texture t) {
+        super(gameObjectName, gameObjectCategory);
+
         x = posX;
         y = posY;
         world = w;
@@ -132,6 +136,11 @@ public class Bullet implements IPhysicsComponent {
 
     public void draw(Batch batch) {
         sprite.draw(batch);
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     @Override
