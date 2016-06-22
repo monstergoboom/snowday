@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion "24.0.0 rc3"
+    buildToolsVersion "24.0.0"
     compileSdkVersion 23
     sourceSets {
         main {
@@ -118,5 +118,4 @@ idea {
     }
 }
 dependencies {
-    compile files('libs/ouya-sdk.jar')
 }

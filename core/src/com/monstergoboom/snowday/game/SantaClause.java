@@ -11,7 +11,7 @@ public class SantaClause extends PlayerCharacter {
     private Weapon primaryWeapon;
 
     public SantaClause(int x, int y, World b2World, SkeletonData sd) {
-        super("santa", 0.25f, x, y, b2World, sd);
+        super("santa", .5f, x, y, b2World, sd);
 
         primaryWeapon = new OrnamentBlaster();
     }

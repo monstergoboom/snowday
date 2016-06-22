@@ -42,6 +42,8 @@ public class SnowDay extends ApplicationAdapter{
     private PlayerControllerListener playerControllerListener;
 
     public void setup() {
+        HelperUtils.updateUnitRatios(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 8f);
+
         fontCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         fontCamera.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
         fontCamera.update();

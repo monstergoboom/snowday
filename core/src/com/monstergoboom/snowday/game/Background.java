@@ -1,16 +1,10 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
-
 
 /**
  * Created by amitrevski on 12/25/14.
@@ -28,8 +22,6 @@ public class Background {
     protected TextureAtlas.AtlasRegion atlasRegion;
     protected boolean needsUpdate;
     protected World world;
-
-    final static float PIXEL_TO_METERS_RATIO = 0.00366f;
 
     public Background(String asset, String region, int index, World w, TextureAtlas ta) {
         positionX = 0;
@@ -102,14 +94,20 @@ public class Background {
         batch.disableBlending();
 
         if(texture != null) {
-            batch.draw(texture, positionX * PIXEL_TO_METERS_RATIO, positionY * PIXEL_TO_METERS_RATIO,
-                Gdx.graphics.getWidth() * PIXEL_TO_METERS_RATIO,
-                    Gdx.graphics.getHeight() * PIXEL_TO_METERS_RATIO);
+            batch.draw(texture,
+                    HelperUtils.convertPixelsToUnits(positionX),
+                    HelperUtils.convertPixelsToUnits(positionY),
+                    HelperUtils.convertPixelsToUnits(Gdx.graphics.getWidth()),
+                    HelperUtils.convertPixelsToUnits(Gdx.graphics.getHeight()));
         }
         else if(atlasRegion != null) {
-            batch.draw(atlasRegion, positionX * PIXEL_TO_METERS_RATIO, positionY * PIXEL_TO_METERS_RATIO,
-                    atlasRegion.originalWidth * PIXEL_TO_METERS_RATIO, atlasRegion.originalHeight * PIXEL_TO_METERS_RATIO);
+            batch.draw(atlasRegion,
+                    HelperUtils.convertPixelsToUnits(positionX),
+                    HelperUtils.convertPixelsToUnits(positionY),
+                    HelperUtils.convertPixelsToUnits(atlasRegion.originalWidth),
+                    HelperUtils.convertPixelsToUnits(atlasRegion.originalHeight));
         }
+
         batch.enableBlending();
     }
 }

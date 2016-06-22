@@ -103,7 +103,7 @@ public class SnowflakeGenerator {
             scaleFactor = th/40;
         }
 
-        bitmapFont.setScale(scaleFactor);
+        bitmapFont.getData().setScale(scaleFactor);
 
         assetManager = new AssetManager(new InternalFileHandleResolver());
         textureAtlasLoader = new TextureAtlasLoader(new InternalFileHandleResolver());

@@ -2,7 +2,6 @@ package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Align;
 
 /**
  * Created by amitrevski on 12/28/14.
@@ -130,8 +130,8 @@ public class GlobeContainer {
     }
 
     public void drawText(Batch fontBatch) {
-        font.drawMultiLine(fontBatch, text, x, y + height/2 + font.getDescent(),
-                width, BitmapFont.HAlignment.CENTER);
+        font.draw(fontBatch, text, x, y + height/2 + font.getDescent(),
+                width, Align.center, true);
     }
 
     public void draw(Batch batch) {

@@ -2,6 +2,7 @@ package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 /**
  * Created by amitrevski on 12/29/14.
@@ -50,10 +51,11 @@ public class PlayerScore {
     public void update(float animationDelta) {
         if(needsUpdate) {
             scoreText = String.format(format, score);
-            font.scale(scale);
-            BitmapFont.TextBounds bounds = font.getBounds(scoreText);
+            font.getData().scale(scale);
 
-            renderX = x - (int)(bounds.width/2);
+            GlyphLayout glyphLayout = new GlyphLayout(font, scoreText);
+
+            renderX = x - (int)(glyphLayout.width/2);
             renderY = y;
 
             needsUpdate = false;
