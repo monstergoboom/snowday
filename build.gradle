@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.2.0'
     }
 }
 
@@ -16,7 +16,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'snowday'
-        gdxVersion = '1.9.3'
+        gdxVersion = '1.9.4'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.4.0'
