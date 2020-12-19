@@ -7,6 +7,7 @@ import com.monstergoboom.snowday.game.SnowDay;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
         config.title = "SnowDay";
         config.width = 1024;
         config.height = 768;

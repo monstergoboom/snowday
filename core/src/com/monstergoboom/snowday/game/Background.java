@@ -1,6 +1,7 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -94,6 +95,7 @@ public class Background {
         batch.disableBlending();
 
         if(texture != null) {
+            batch.setColor(Color.WHITE);
             batch.draw(texture,
                     HelperUtils.convertPixelsToUnits(positionX),
                     HelperUtils.convertPixelsToUnits(positionY),
