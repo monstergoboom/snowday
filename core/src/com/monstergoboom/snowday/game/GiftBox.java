@@ -114,4 +114,14 @@ public class GiftBox extends GameObject {
     public void endContact(GameObject contactWith) {
 
     }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void show() {
+
+    }
 }

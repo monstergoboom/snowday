@@ -22,16 +22,16 @@ public class PlayerHud {
         magicGlobe = new MagicGlobe(125, Gdx.graphics.getHeight() - 150, 100, 100, 100,100,
                 asm);
 
-        playerScore = new PlayerScore(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 50, 1.0f,
+        playerScore = new PlayerScore(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 50, .1f,
                 HelperUtils.playerScoreDefaultFormat, asm);
 
-        giftBox1 = new RedGiftBox(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 150,
+        giftBox1 = new RedGiftBox(25, Gdx.graphics.getHeight() - 250,
                 asm);
 
-        giftBox2 = new RedGiftBox(Gdx.graphics.getWidth() - 275, Gdx.graphics.getHeight() - 150,
+        giftBox2 = new RedGiftBox(100, Gdx.graphics.getHeight() - 250,
                 asm);
 
-        giftBox3 = new RedGiftBox(Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 150,
+        giftBox3 = new RedGiftBox(175, Gdx.graphics.getHeight() - 250,
                 asm);
     }
 

@@ -1,5 +1,7 @@
 package com.monstergoboom.snowday.game;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+
 /**
  * Created by amitrevski on 12/26/14.
  */
@@ -21,6 +23,8 @@ public abstract class GameObject {
     }
 
     public abstract void setPosition(int x, int y);
+    public abstract void hide();
+    public abstract void show();
     public abstract void beginContact(GameObject contactWith);
     public abstract void endContact(GameObject contactWith);
 }

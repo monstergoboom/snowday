@@ -23,7 +23,7 @@ import java.util.UUID;
 /**
  * Created by amitrevski on 12/23/14.
  */
-public abstract class Character extends GameObject implements IPhysicsComponent {
+public abstract class Character extends GameObject implements PhysicsComponent {
     private UUID id;
 
     protected Skeleton skeleton;
@@ -37,6 +37,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     protected float animationSpeed;
     protected float movementSpeed;
     protected float movementDelta;
+    protected float speed;
     protected float scale;
     protected String assetName;
     protected boolean hasBoundingBox;
@@ -84,6 +85,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         id = UUID.randomUUID();
         animationSpeed = 1.0f;
         movementSpeed = 0.01678f;
+        speed = 1.0f;
         movementDelta = 0;
         scale = drawScale;
         hasBoundingBox = false;
@@ -312,18 +314,16 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
         else {
             if (movementDelta > movementSpeed) {
                 if (isWalking()) {
-                    //animationState.setAnimation(0, movementState, true);
-
                     Vector2 v = body.getLinearVelocity();
 
                     if (movementDirection < 0) {
                         if (!skeleton.getFlipX())
                             skeleton.setFlipX(true);
-                        v.x = -1;
+                        v.x = -speed;
                     } else {
                         if (skeleton.getFlipX())
                             skeleton.setFlipX(false);
-                        v.x = 1;
+                        v.x = speed;
                     }
 
                     body.setLinearVelocity(v);
@@ -348,7 +348,7 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
 
                         Animation a = skeletonData.findAnimation("attack");
                         if (a != null )
-                            animationState.addAnimation(1, a, false, 2);
+                            animationState.addAnimation(1, a, false, 0);
 
                         movementCombatStateHasChanged = false;
                         setMovementCombatState("idle");
@@ -362,6 +362,9 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
                 skeleton.updateWorldTransform();
 
                 movementDelta = 0;
+
+                positionX = HelperUtils.convertUnitsToPixel(body.getPosition().x);
+                positionY = HelperUtils.convertUnitsToPixel(body.getPosition().y);
             }
         }
 
@@ -384,4 +387,16 @@ public abstract class Character extends GameObject implements IPhysicsComponent 
     public void updateWorldBody(float x, float y, float r) {
         setBodyPosition(x,y,r);
     }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    public abstract Weapon getPrimaryWeapon();
 }

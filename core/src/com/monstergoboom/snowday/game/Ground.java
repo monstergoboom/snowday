@@ -72,6 +72,16 @@ public class Ground extends GameObject {
 
     }
 
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void show() {
+
+    }
+
     public static class GroundDef {
         public int positionIndex;
         public int atlasIndex;

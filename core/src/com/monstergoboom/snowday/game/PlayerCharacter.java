@@ -1,6 +1,7 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.SkeletonData;
 
@@ -8,8 +9,11 @@ import com.esotericsoftware.spine.SkeletonData;
  * Created by amitrevski on 12/23/14.
  */
 public class PlayerCharacter extends Character {
-    public PlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd) {
+    SnowDayAssetManager assetManager;
+
+    public PlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd, SnowDayAssetManager assetManager) {
         super(assetName, scale, x, y, "player_character", "character", b2World, sd, 0x0002, 0xffff & ~0x0004);
+        this.assetManager = assetManager;
     }
 
     @Override
@@ -53,5 +57,10 @@ public class PlayerCharacter extends Character {
     @Override
     void die() {
 
+    }
+
+    @Override
+    public Weapon getPrimaryWeapon() {
+        return null;
     }
 }

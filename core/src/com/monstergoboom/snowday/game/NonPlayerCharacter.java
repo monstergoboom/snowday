@@ -45,4 +45,9 @@ public class NonPlayerCharacter extends Character {
     void die() {
 
     }
+
+    @Override
+    public Weapon getPrimaryWeapon() {
+        return null;
+    }
 }

@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.controllers.Controller;
@@ -34,8 +36,8 @@ public class SnowDay extends ApplicationAdapter{
     private SnowflakeGenerator snowflakeGenerator;
     private PlayerHud playerHud;
     private ChristmasTree tree1;
+    private OrnamentBlaster ornamentBlaster;
 
-    private RedOrnamentBullet bullet;
     private float bulletTime = 0.0f;
 
     private Controller controller;
@@ -67,7 +69,7 @@ public class SnowDay extends ApplicationAdapter{
                 snowDayAssetManager.getTexture("backdrop_1"));
 
         santaClause = new SantaClause(75, 100, physicsSystem.getWorld(),
-                snowDayAssetManager.getSkeletonData("santa"));
+                snowDayAssetManager.getSkeletonData("santa"), snowDayAssetManager);
 
 
         elf = new Elf(400, 100, physicsSystem.getWorld(),
@@ -79,7 +81,7 @@ public class SnowDay extends ApplicationAdapter{
         reindeer = new Reindeer(700, 100, physicsSystem.getWorld(),
                 snowDayAssetManager.getSkeletonData("reindeer"));
 
-        tree1 = new ChristmasTree(1200, 75, physicsSystem.getWorld(),
+        tree1 = new ChristmasTree(900, 75, physicsSystem.getWorld(),
                 snowDayAssetManager);
 
         snowGround = new SnowGround(physicsSystem.getWorld());
@@ -97,8 +99,14 @@ public class SnowDay extends ApplicationAdapter{
 
         playerHud = new PlayerHud(snowDayAssetManager);
 
-        bullet = new RedOrnamentBullet(300, 1200, physicsSystem.getWorld(),
+        TextureAtlas miscTextureAtlas = snowDayAssetManager.getTextureAtlas("misc");
+
+        ornamentBlaster = new OrnamentBlaster(new RedOrnamentBullet(600, 600,
+                physicsSystem.getWorld(),
+                miscTextureAtlas.createSprite("green_ornament")),
                 snowDayAssetManager);
+
+        santaClause.setPrimaryWeapon(ornamentBlaster);
 
         Array<Controller> a = Controllers.getControllers();
 
@@ -112,7 +120,8 @@ public class SnowDay extends ApplicationAdapter{
             }
         }
         else {
-            Gdx.input.setInputProcessor(new GestureDetector(new GestureInputListener(santaClause)));
+            // Gdx.input.setInputProcessor(new GestureDetector(new GestureInputListener(santaClause)));
+            Gdx.input.setInputProcessor(new DesktopInputListener(santaClause));
             Gdx.app.log("Controllers", "no controllers attached to device");
         }
     }
@@ -127,14 +136,16 @@ public class SnowDay extends ApplicationAdapter{
 
         background.draw(spriteBatch);
         snowGround.draw(spriteBatch);
+
         tree1.draw(spriteBatch);
-        santaClause.draw(spriteBatch);
         elf.draw(spriteBatch);
         snowman.draw(spriteBatch);
         reindeer.draw(spriteBatch);
+        santaClause.draw(spriteBatch);
+
         snowflakeGenerator.draw(spriteBatch);
+
         playerHud.draw(spriteBatch);
-        bullet.draw(spriteBatch);
 
         spriteBatch.end();
 
@@ -150,22 +161,15 @@ public class SnowDay extends ApplicationAdapter{
         physicsSystem.update(animationDelta);
 
         background.update(animationDelta);
-        santaClause.update(animationDelta);
+        snowGround.update(animationDelta);
+
         elf.update(animationDelta);
         snowman.update(animationDelta);
         reindeer.update(animationDelta);
-        snowGround.update(animationDelta);
         tree1.update(animationDelta);
-        playerHud.update(animationDelta);
+        santaClause.update(animationDelta);
         snowflakeGenerator.update(animationDelta);
-        bullet.update(animationDelta);
-
-        /*
-        if(bulletTime > 5) {
-            bullet.shoot(0.00001f,0.01f);
-            bulletTime = 0f;
-        }
-        */
+        playerHud.update(animationDelta);
     }
 
     @Override

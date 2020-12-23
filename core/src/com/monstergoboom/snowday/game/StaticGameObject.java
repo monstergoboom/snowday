@@ -38,6 +38,7 @@ public class StaticGameObject extends GameObject {
     protected short filterCategory;
     protected short filterMask;
     protected boolean isSensor;
+    protected boolean isVisible;
 
     private Skeleton skeleton;
     private SkeletonRenderer skeletonRenderer;
@@ -77,6 +78,7 @@ public class StaticGameObject extends GameObject {
         filterCategory = (short)category;
         filterMask = (short)(mask);
         isSensor = sensor;
+        isVisible = true;
     }
 
     public StaticGameObject(int x, int y, float drawScale,
@@ -110,6 +112,7 @@ public class StaticGameObject extends GameObject {
         filterCategory = (short)category;
         filterMask = (short)(mask);
         isSensor = sensor;
+        isVisible = true;
 
         LoadTexture();
     }
@@ -144,6 +147,7 @@ public class StaticGameObject extends GameObject {
         filterCategory = (short)category;
         filterMask = (short)(mask);
         isSensor = sensor;
+        isVisible = true;
 
         LoadSkeleton();
     }
@@ -283,5 +287,15 @@ public class StaticGameObject extends GameObject {
                         HelperUtils.convertPixelsToUnits(atlasRegion.originalHeight));
             }
         }
+    }
+
+    @Override
+    public void hide() {
+        isVisible = false;
+    }
+
+    @Override
+    public void show() {
+        isVisible = true;
     }
 }

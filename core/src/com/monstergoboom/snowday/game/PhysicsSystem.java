@@ -62,8 +62,8 @@ public class PhysicsSystem {
             world.getBodies(bodies);
             for (Body b : bodies) {
                 Object obj = b.getUserData();
-                if (obj instanceof IPhysicsComponent) {
-                    ((IPhysicsComponent) obj).updateWorldBody(b.getPosition().x,
+                if (obj instanceof PhysicsComponent) {
+                    ((PhysicsComponent) obj).updateWorldBody(b.getPosition().x,
                             b.getPosition().y, b.getAngle());
                 }
             }
