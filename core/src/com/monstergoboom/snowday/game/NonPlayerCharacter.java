@@ -12,37 +12,37 @@ public class NonPlayerCharacter extends Character {
     }
 
     @Override
-    void attack() {
+    protected void attack() {
 
     }
 
     @Override
-    void run() {
+    protected void run() {
 
     }
 
     @Override
-    void walk(int direction) {
+    protected void walk(int direction) {
 
     }
 
     @Override
-    void jump() {
+    protected void jump() {
 
     }
 
     @Override
-    void doubleJump() {
+    protected void doubleJump() {
 
     }
 
     @Override
-    void idle() {
+    protected void idle() {
 
     }
 
     @Override
-    void die() {
+    protected void die() {
 
     }
 

@@ -27,14 +27,13 @@ public class SantaClause extends PlayerCharacter {
     }
 
     @Override
-    void attack() {
+    protected void attack() {
         super.attack();
 
         if (primaryWeapon != null) {
-            primaryWeapon.setPosition(positionX, positionY + (100));
+            primaryWeapon.setPosition(positionX, positionY + (150));
             primaryWeapon.setDirection(movementDirection);
             primaryWeapon.fire();
-            Gdx.app.log("Santa Clause", "attacking");
         }
     }
 
@@ -51,7 +50,6 @@ public class SantaClause extends PlayerCharacter {
         super.update(delta);
         if ( primaryWeapon != null) {
             primaryWeapon.update(delta);
-            Gdx.app.log("santa", String.format("position: %d, %d", positionX, positionY));
         }
     }
 }

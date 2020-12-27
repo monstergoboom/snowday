@@ -1,7 +1,5 @@
 package com.monstergoboom.snowday.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.SkeletonData;
 
@@ -17,46 +15,43 @@ public class PlayerCharacter extends Character {
     }
 
     @Override
-    void attack() {
-        Gdx.app.log("PlayerCharacter", "attacking");
-        setMovementCombatState("attack");
+    protected void attack() {
+        super.attack();
     }
 
     @Override
-    void run() {
-        Gdx.app.log("PlayerCharacter", "running");
-        setMovementState("run");
+    protected void secondaryAttack() {
+        super.secondaryAttack();
     }
 
     @Override
-    void walk(int direction) {
-        Gdx.app.log("PlayerCharacter", "walking");
-        setMovementState("walk");
-        setMovementDirection(direction);
+    protected void run() {
+        super.run();
     }
 
     @Override
-    void jump() {
-        if(!isJumping() && hasGroundContact()) {
-            Gdx.app.log("PlayerCharacter", "jumping");
-            setMovementActionState("jump");
-        }
+    protected void walk(int direction) {
+        super.walk(direction);
     }
 
     @Override
-    void doubleJump() {
-
+    protected void jump() {
+        super.jump();
     }
 
     @Override
-    void idle() {
-        Gdx.app.log("PlayerCharacter", "idling");
-        setMovementState("idle");
+    protected void doubleJump() {
+        super.doubleJump();
     }
 
     @Override
-    void die() {
+    protected void idle() {
+        super.idle();
+    }
 
+    @Override
+    protected void die() {
+        super.die();
     }
 
     @Override

@@ -213,6 +213,71 @@
          id="feBlend104"
          in2="fbSourceGraphic" />
     </filter>
+    <filter
+       id="filter1384"
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Bright Metal"
+       inkscape:menu="Bevels"
+       inkscape:menu-tooltip="Bright metallic effect for any color">
+      <feGaussianBlur
+         id="feGaussianBlur1364"
+         in="SourceGraphic"
+         stdDeviation="8"
+         result="result6" />
+      <feComposite
+         id="feComposite1366"
+         result="result10"
+         operator="xor"
+         in="result6"
+         in2="SourceGraphic" />
+      <feGaussianBlur
+         id="feGaussianBlur1368"
+         stdDeviation="8"
+         result="result2" />
+      <feComposite
+         id="feComposite1370"
+         result="result91"
+         in="result10"
+         operator="atop"
+         in2="SourceGraphic" />
+      <feComposite
+         id="feComposite1372"
+         in2="result91"
+         operator="xor"
+         in="result2"
+         result="result4" />
+      <feGaussianBlur
+         id="feGaussianBlur1374"
+         stdDeviation="4"
+         result="result3"
+         in="result4" />
+      <feSpecularLighting
+         id="feSpecularLighting1378"
+         surfaceScale="18"
+         specularConstant="1.1"
+         specularExponent="5"
+         result="result5">
+        <feDistantLight
+           id="feDistantLight1376"
+           elevation="55"
+           azimuth="235" />
+      </feSpecularLighting>
+      <feComposite
+         id="feComposite1380"
+         k1="0.5"
+         in2="result5"
+         result="result7"
+         operator="arithmetic"
+         k2="0.5"
+         k3="1.1"
+         in="result3" />
+      <feComposite
+         id="feComposite1382"
+         result="result8"
+         in2="SourceGraphic"
+         operator="atop"
+         in="result7" />
+    </filter>
   </defs>
   <sodipodi:namedview
      inkscape:snap-bbox="true"
@@ -221,18 +286,18 @@
      inkscape:snap-grids="false"
      inkscape:snap-to-guides="false"
      inkscape:snap-others="true"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      inkscape:window-y="23"
-     inkscape:window-x="0"
+     inkscape:window-x="1"
      inkscape:window-height="1004"
      inkscape:window-width="1792"
      showgrid="false"
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="666.90941"
-     inkscape:cx="80.319876"
-     inkscape:zoom="0.81404938"
+     inkscape:cy="746.39708"
+     inkscape:cx="148.53397"
+     inkscape:zoom="1.1512397"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -256,7 +321,7 @@
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
     <g
-       transform="matrix(1.4276893,0,0,1.7389231,-12.824772,-63.254595)"
+       transform="matrix(1.4276893,0,0,1.7389231,73.630876,-76.580466)"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
        id="g1043">
@@ -433,14 +498,12 @@
          sodipodi:t0="0" />
     </g>
     <path
-       transform="scale(0.26458333)"
-       d="M 174.33008 642.15625 L 103.64648 668.26367 L 103.1875 668.26367 L 103.1875 668.43359 L 102.80664 668.57422 L 103.1875 668.57422 L 103.1875 726 L 173.46875 946.53516 A 43.609147 38.695442 0 0 0 159.69531 974.75586 A 43.609147 38.695442 0 0 0 203.30469 1013.4531 A 43.609147 38.695442 0 0 0 232.69336 1003.3438 L 244.83203 1003.3438 L 238.36133 997.76953 A 43.609147 38.695442 0 0 0 246.91406 974.75586 A 43.609147 38.695442 0 0 0 240.13672 954.04297 L 245.44531 949.4707 L 255.87305 956.86914 L 269.36914 949.4707 L 279.18555 956.86914 L 289.62305 950.16992 L 299.41406 955.77148 L 308.33594 949.27148 L 235.98438 949.13672 L 300.96484 726 L 300.96484 668.57422 L 301.3457 668.57422 L 300.96484 668.41992 L 300.96484 668.26367 L 300.57812 668.26367 L 235.98828 642.15625 L 174.33008 642.15625 z M 308.33594 949.27148 L 308.95508 949.27148 L 308.60938 949.07227 L 308.33594 949.27148 z M 308.95508 949.27148 L 318.43359 954.73633 L 329.375 949.31055 L 308.95508 949.27148 z M 329.375 949.31055 L 415.37305 949.4707 L 329.45312 949.27148 L 329.375 949.31055 z M 244.83203 1003.3438 L 268.75586 1003.3438 L 255.25977 995.94336 L 244.83203 1003.3438 z M 268.75586 1003.3438 L 307.44922 1003.3438 L 298.80078 997.04297 L 289.00977 1002.6445 L 278.57227 995.94336 L 268.75586 1003.3438 z M 307.44922 1003.3438 L 307.99609 1003.7422 L 308.6875 1003.3438 L 307.44922 1003.3438 z M 308.6875 1003.3438 L 328.44141 1003.3438 L 317.82031 998.07617 L 308.6875 1003.3438 z M 328.44141 1003.3438 L 328.83984 1003.541 L 414.75781 1003.3438 L 328.44141 1003.3438 z M 117.84375 734.53516 L 286.30664 734.53516 L 230.84961 936.125 L 178.53125 936.125 L 117.84375 734.53516 z M 414.75781 949.48242 A 1.834783 26.502243 0 0 0 412.92383 975.98438 A 1.834783 26.502243 0 0 0 414.75781 1002.4863 A 1.834783 26.502243 0 0 0 416.59375 975.98438 A 1.834783 26.502243 0 0 0 414.75781 949.48242 z "
-       style="fill:#ff0000;stroke:#8c0000;stroke-width:1.002;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect1045" />
-    <path
-       transform="scale(0.26458333)"
-       id="path1095"
-       d="m 261.87759,998.25643 -6.89627,-3.82019 -4.52369,3.45038 c -4.04033,3.08168 -4.8403,3.28098 -7.48688,1.86453 -2.80625,-1.50186 -2.86089,-1.74201 -1.03164,-4.53381 6.11515,-9.3329 7.37212,-24.25503 2.91574,-34.61417 -2.16349,-5.02918 -2.39085,-6.5945 -1.17127,-8.06401 1.31092,-1.57956 2.22535,-1.31214 6.83639,1.99926 l 5.32305,3.82272 6.72079,-3.79298 6.72078,-3.79297 4.57491,3.63567 c 2.5162,1.99963 4.92336,3.63568 5.34926,3.63568 0.42589,0 2.88446,-1.43385 5.46348,-3.18634 l 4.68913,-3.18635 5.23594,2.77766 5.23595,2.77766 4.40545,-3.3602 4.40546,-3.3602 4.91077,2.82628 4.91078,2.82628 5.64525,-2.74267 c 5.50012,-2.67217 6.71026,-2.74267 47.07179,-2.74217 l 41.42654,5.1e-4 v 25.79682 25.79678 l -42.04075,-3e-4 c -40.76471,-4e-4 -42.209,-0.082 -47.58381,-2.69342 l -5.54305,-2.69302 -4.70629,2.64509 -4.7063,2.64505 -4.5482,-3.23606 -4.5482,-3.23609 -4.9593,2.78729 -4.95931,2.78726 -4.8182,-3.18852 c -2.65002,-1.75369 -5.16511,-3.18854 -5.58909,-3.18854 -0.42399,0 -2.80985,1.61489 -5.30191,3.58865 l -4.53103,3.58861 z"
-       style="fill:#000000;stroke:#8c0000;stroke-width:1.23088;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/Users/amitrevski/Projects/monstergoboom/snowday/android/assets/santa/blaster.png"
+       d="m 141.33423,199.78444 c -33.1521,38.74905 -88.579612,-10.57501 -110.832506,1.30018 -8.958415,5.09983 -18.201213,27.22284 -11.236897,37.08787 55.440303,-2.09451 36.825239,-14.53804 72.759755,-7.36875 l 5.75675,7.00836 c 8.380968,-2.63768 15.400518,-4.23815 23.763408,-2.35542 10.34898,3.74894 20.11454,12.75582 20.11454,12.75582 z m -41.820551,30.45692 6.523831,3.87709 -7.606088,2.06842 -4.87567,-5.85029 z"
+       style="fill:#ffec2e;fill-opacity:1;stroke:#000000;stroke-width:1.32292;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter1384)"
+       id="path1119"
+       sodipodi:nodetypes="ccccccccccccc" />
   </g>
 </svg>

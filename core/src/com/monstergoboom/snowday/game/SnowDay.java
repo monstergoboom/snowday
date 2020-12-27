@@ -75,14 +75,14 @@ public class SnowDay extends ApplicationAdapter{
         elf = new Elf(400, 100, physicsSystem.getWorld(),
                 snowDayAssetManager);
 
-        snowman = new Snowman(600,100, physicsSystem.getWorld(),
-                snowDayAssetManager.getSkeletonData("snowman"));
+        //snowman = new Snowman(600,100, physicsSystem.getWorld(),
+                //snowDayAssetManager.getSkeletonData("snowman"));
 
-        reindeer = new Reindeer(700, 100, physicsSystem.getWorld(),
-                snowDayAssetManager.getSkeletonData("reindeer"));
+        //reindeer = new Reindeer(700, 100, physicsSystem.getWorld(),
+                //snowDayAssetManager.getSkeletonData("reindeer"));
 
-        tree1 = new ChristmasTree(900, 75, physicsSystem.getWorld(),
-                snowDayAssetManager);
+        //tree1 = new ChristmasTree(900, 75, physicsSystem.getWorld(),
+                //snowDayAssetManager);
 
         snowGround = new SnowGround(physicsSystem.getWorld());
         snowflakeGenerator = new SnowflakeGenerator(
@@ -103,7 +103,7 @@ public class SnowDay extends ApplicationAdapter{
 
         ornamentBlaster = new OrnamentBlaster(new RedOrnamentBullet(600, 600,
                 physicsSystem.getWorld(),
-                miscTextureAtlas.createSprite("green_ornament")),
+                miscTextureAtlas.createSprite("red_ornament")),
                 snowDayAssetManager);
 
         santaClause.setPrimaryWeapon(ornamentBlaster);
@@ -137,15 +137,15 @@ public class SnowDay extends ApplicationAdapter{
         background.draw(spriteBatch);
         snowGround.draw(spriteBatch);
 
-        tree1.draw(spriteBatch);
+        //tree1.draw(spriteBatch);
         elf.draw(spriteBatch);
-        snowman.draw(spriteBatch);
-        reindeer.draw(spriteBatch);
+        //snowman.draw(spriteBatch);
+        //reindeer.draw(spriteBatch);
         santaClause.draw(spriteBatch);
 
         snowflakeGenerator.draw(spriteBatch);
 
-        playerHud.draw(spriteBatch);
+        //playerHud.draw(spriteBatch);
 
         spriteBatch.end();
 
@@ -164,9 +164,9 @@ public class SnowDay extends ApplicationAdapter{
         snowGround.update(animationDelta);
 
         elf.update(animationDelta);
-        snowman.update(animationDelta);
-        reindeer.update(animationDelta);
-        tree1.update(animationDelta);
+        //snowman.update(animationDelta);
+        //reindeer.update(animationDelta);
+        //tree1.update(animationDelta);
         santaClause.update(animationDelta);
         snowflakeGenerator.update(animationDelta);
         playerHud.update(animationDelta);

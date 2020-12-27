@@ -34,7 +34,7 @@ public class OrnamentBlaster extends Weapon {
         magazine = Stream.generate(() -> {
             RedOrnamentBullet redOrnamentBullet = new RedOrnamentBullet(0, 0, bullet.world,
                     assetManager.getTextureAtlas("misc")
-                            .createSprite("yellow_ornament"));
+                            .createSprite("green_ornament"));
             redOrnamentBullet.hide();
             return redOrnamentBullet;
         })
@@ -53,12 +53,6 @@ public class OrnamentBlaster extends Weapon {
             item.shoot(20f, 5f, direction);
             fired.offer(item);
         }
-
-        if (currentCount <= 0)
-            Gdx.app.log("weapon", "no ammo, must reload");
-        else {
-            Gdx.app.log("weapon", String.format("weapon fired, ammo left: %d", currentCount));
-        }
     }
 
     @Override
@@ -73,8 +67,6 @@ public class OrnamentBlaster extends Weapon {
         }
 
         currentCount = maxCapacity;
-
-        Gdx.app.log("weapon", String.format("reloading weapon with %d ammo", reloadCount));
 
         return reloadCount;
     }
@@ -100,7 +92,6 @@ public class OrnamentBlaster extends Weapon {
         magazine.forEach(item ->
         {
             item.update(animationDelta);
-            Gdx.app.log("blaster", String.format("set position: %d, %d id: %s", item.x, item.y, item.getReferenceName()));
         });
     }
 
@@ -108,8 +99,6 @@ public class OrnamentBlaster extends Weapon {
     public void draw(Batch batch) {
         fired.forEach(item -> {
             item.draw(batch);
-            Gdx.app.log("blaster",
-                    String.format("drawing at %d, %d id: %s.", item.x, item.y, item.reference_name));
         });
         magazine.forEach(item -> item.draw(batch));
     }

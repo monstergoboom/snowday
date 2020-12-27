@@ -29,6 +29,9 @@ public class DesktopInputListener implements InputProcessor {
             case Input.Keys.APOSTROPHE:
                 playerCharacter.attack();
                 break;
+            case Input.Keys.SEMICOLON:
+                playerCharacter.secondaryAttack();
+                break;
             case Input.Keys.R:
                 playerCharacter.getPrimaryWeapon().reload(10);
                 break;
@@ -81,7 +84,7 @@ public class DesktopInputListener implements InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean scrolled(float amountX, float amountY) {
         return false;
     }
 }

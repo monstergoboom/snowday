@@ -2,22 +2,28 @@ package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.PolygonBatch;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
-import com.esotericsoftware.spine.SkeletonBounds;
 import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonRenderer;
-import com.esotericsoftware.spine.attachments.BoundingBoxAttachment;
+import com.esotericsoftware.spine.Skin.SkinEntry;
+import com.esotericsoftware.spine.attachments.RegionAttachment;
+import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,13 +36,11 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     protected SkeletonRenderer skeletonRenderer;
     protected SkeletonData skeletonData;
     protected AnimationState animationState;
-    protected AnimationState animationCombatState;
 
     protected int positionX;
     protected int positionY;
     protected float animationSpeed;
     protected float movementSpeed;
-    protected float movementDelta;
     protected float speed;
     protected float scale;
     protected String assetName;
@@ -51,21 +55,10 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     protected int movementDirection;
     protected boolean movementStateHasChanged;
 
-    protected String movementActionState;
-    protected String movementActionStatePrevious;
-    protected boolean movementActionStateHasChanged;
-
-    protected String movementCombatState;
-    protected String movementCombatStatePrevious;
-    protected boolean movementCombatStateHasChanged;
-
-    protected float hangTime;
-    protected float hangTimeDelta;
-
     protected short filterCategory;
     protected short filterMask;
 
-    protected int hasGroundContactCounter;
+    protected boolean hasGroundContact;
 
     protected int maxHealth;
     protected int currentHealth;
@@ -83,10 +76,9 @@ public abstract class Character extends GameObject implements PhysicsComponent {
         positionY = y;
         assetName = assetNameParam;
         id = UUID.randomUUID();
-        animationSpeed = 1.0f;
-        movementSpeed = 0.01678f;
-        speed = 1.0f;
-        movementDelta = 0;
+        animationSpeed = 1.7f;
+        movementSpeed = 0.03f;
+        speed = 15.0f;
         scale = drawScale;
         hasBoundingBox = false;
         needsUpdate = true;
@@ -94,55 +86,34 @@ public abstract class Character extends GameObject implements PhysicsComponent {
         world = b2World;
         skeletonData = sd;
         skeletonRenderer = new SkeletonRenderer();
-        animationCombatState = null;
         animationState = null;
 
-        movementActionState = "idle";
-        movementActionStateHasChanged = false;
-        movementActionStatePrevious = "idle";
-
         movementState = "idle";
-        movementStatePrevious = "idle";
-        movementStateHasChanged = false;
+        movementStatePrevious = "not_set";
+        movementStateHasChanged = true;
 
-        movementCombatState = "idle";
-        movementCombatStatePrevious = "idle";
-        movementCombatStateHasChanged = false;
+        filterCategory = (short) category;
+        filterMask = (short) (mask);
 
-        filterCategory = (short)category;
-        filterMask = (short)(mask);
-
-        hangTime = .5f;
-        hangTimeDelta = 0;
-
-        hasGroundContactCounter = 0;
+        hasGroundContact = false;
 
         LoadSkeleton();
     }
 
     public boolean hasGroundContact() {
-        return hasGroundContactCounter > 0;
+        return hasGroundContact;
     }
 
     public void beginContact(GameObject contactWith) {
-
-        if (contactWith.getReferenceCategory() == "platform") {
-            hasGroundContactCounter += 1;
+        if (contactWith.getReferenceCategory() == "snow_ground") {
+            hasGroundContact = true;
         }
-
-        Gdx.app.log("Character",
-                String.format("start contact with %s, counter: %d", contactWith.getReferenceName(),
-                        hasGroundContactCounter));
     }
 
     public void endContact(GameObject contactWith) {
-        if (contactWith.getReferenceCategory() == "platform") {
-            hasGroundContactCounter -= 1;
+        if (contactWith.getReferenceCategory() == "snow_ground") {
+            hasGroundContact = false;
         }
-
-        Gdx.app.log("Character",
-                String.format("end contact with %s, counter: %d", contactWith.getReferenceName(),
-                        hasGroundContactCounter));
     }
 
     public int getMaxHealth() {
@@ -162,7 +133,7 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     }
 
     public void setMovementState(String value) {
-        if(!movementState.equalsIgnoreCase(value)) {
+        if (!movementState.equalsIgnoreCase(value)) {
             movementStatePrevious = movementState;
             movementState = value;
             movementStateHasChanged = true;
@@ -171,29 +142,19 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     }
 
     public void setMovementDirection(int direction) {
-        movementDirection = direction;
-    }
+        if ( movementDirection != direction ) {
+            movementDirection = direction;
 
-    public void setMovementActionState(String value) {
-        if (!movementActionState.equalsIgnoreCase(value)) {
-            movementActionStatePrevious = movementActionState;
-            movementActionState = value;
-            movementActionStateHasChanged = true;
-            needsUpdate = true;
-        }
-    }
-
-    public void setMovementCombatState(String value) {
-        if (!movementCombatState.equalsIgnoreCase(value)) {
-            movementCombatStatePrevious = movementCombatState;
-            movementCombatState = value;
-            movementCombatStateHasChanged = true;
-            needsUpdate = true;
+            if (movementDirection < 0) {
+                skeleton.getRootBone().setScaleX(-skeleton.getRootBone().getScaleX());
+            } else {
+                skeleton.getRootBone().setScaleX(Math.abs(skeleton.getRootBone().getScaleX()));
+            }
         }
     }
 
     private void LoadSkeleton() {
-        if(skeletonData != null ) {
+        if (skeletonData != null) {
             skeleton = new Skeleton(skeletonData);
             skeleton.setToSetupPose();
 
@@ -204,38 +165,33 @@ public abstract class Character extends GameObject implements PhysicsComponent {
             skeleton.updateWorldTransform();
 
             animationState = new AnimationState(new AnimationStateData(skeletonData));
-            animationCombatState = new AnimationState(new AnimationStateData(skeletonData));
-
-            Animation attackAnimation = skeletonData.findAnimation("attack");
-            if (attackAnimation != null) {
-                animationCombatState.setAnimation(0, attackAnimation, true);
-                animationCombatState.setTimeScale(animationSpeed);
-            }
 
             animationState.setAnimation(0, "idle", true);
             animationState.setTimeScale(animationSpeed);
 
-            SkeletonBounds bounds = new SkeletonBounds();
-            bounds.update(skeleton, true);
-            Array<BoundingBoxAttachment> boundingBoxAttachmentArray = bounds.getBoundingBoxes();
-            for (BoundingBoxAttachment attachment : boundingBoxAttachmentArray) {
-                createBoundingBox(HelperUtils.convertFloatToVector2(attachment.getVertices(), scale));
-            }
+            List<SkinEntry> attachments = Arrays.asList(skeleton.getData().getDefaultSkin()
+                    .getAttachments().toArray());
+
+            attachments.forEach(skinEntry -> {
+                if (skinEntry.getAttachment() instanceof RegionAttachment) {
+                    RegionAttachment regionAttachment = (RegionAttachment) skinEntry.getAttachment();
+                    createBoundingBox(regionAttachment.getUVs());
+                }
+            });
 
             skeleton.updateWorldTransform();
         }
     }
 
-    public void createBoundingBox(Vector2[] vertices) {
-        if(body == null) {
+    public void createBoundingBox(float[] vertices) {
+        if (body == null) {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
 
             Vector2 position = HelperUtils.convertPixelsToUnits(positionX, positionY);
             bodyDef.position.set(position);
             bodyDef.fixedRotation = true;
-            bodyDef.linearDamping = 0f;
-            bodyDef.linearVelocity.y = -5f;
+            bodyDef.linearDamping = 0.0f;
 
             body = world.createBody(bodyDef);
             body.setUserData(this);
@@ -249,11 +205,15 @@ public abstract class Character extends GameObject implements PhysicsComponent {
         fixtureDef.shape = polygonShape;
         fixtureDef.restitution = 0.0f;
         fixtureDef.friction = 1.0f;
-        fixtureDef.density = 25f;
+        fixtureDef.density = 1.26f;
         fixtureDef.filter.categoryBits = filterCategory;
         fixtureDef.filter.maskBits = filterMask;
         fixtureDef.filter.groupIndex = -1;
 
+        MassData massData = new MassData();
+        massData.mass = 75f;
+
+        body.setMassData(massData);
         body.createFixture(fixtureDef);
         body.setUserData(this);
 
@@ -263,23 +223,30 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     }
 
     public boolean isJumping() {
-        return (movementActionState == "jump");
+        return (movementState.equalsIgnoreCase("jump")
+                || movementState.equalsIgnoreCase("double_jump"));
+    }
+
+    public boolean isPreviousJumping() {
+        return (movementStatePrevious.equalsIgnoreCase("jump")
+                || movementStatePrevious.equalsIgnoreCase("double_jump"));
     }
 
     public boolean isWalking() {
-        return (movementState == "walk");
+        return (movementState.equalsIgnoreCase("walk"));
     }
 
     public boolean isRunning() {
-        return (movementState == "run");
+        return (movementState.equalsIgnoreCase("run"));
     }
 
     public boolean isAttacking() {
-        return (movementCombatState == "attack");
+        return (movementState.equalsIgnoreCase("attack")
+                || movementState.equalsIgnoreCase("secondary_attack"));
     }
 
     public boolean isIdle() {
-        return (movementState == "idle");
+        return (movementState.equalsIgnoreCase("idle"));
     }
 
     public UUID getId() {
@@ -302,100 +269,93 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     }
 
     public void update(float delta) {
+        Vector2 linearVelocity = body.getLinearVelocity();
 
-        movementDelta += delta;
-
-        if(movementStateHasChanged) {
-            animationState.setAnimation(0, movementState, true);
-            animationState.apply(skeleton);
-
-            movementStateHasChanged = false;
-        }
-        else {
-            if (movementDelta > movementSpeed) {
-                if (isWalking()) {
-                    Vector2 v = body.getLinearVelocity();
-
-                    if (movementDirection < 0) {
-                        if (!skeleton.getFlipX())
-                            skeleton.setFlipX(true);
-                        v.x = -speed;
-                    } else {
-                        if (skeleton.getFlipX())
-                            skeleton.setFlipX(false);
-                        v.x = speed;
-                    }
-
-                    body.setLinearVelocity(v);
-                }
-
-                if (isJumping()) {
-                    Vector2 v = body.getLinearVelocity();
-
-                    float desired = 4;
-                    float velChange = desired + v.y;
-
-                    float impulse = body.getMass() * velChange;
-                    Vector2 c = body.getWorldCenter();
-                    body.applyLinearImpulse(new Vector2(0, impulse), c, true);
-
-                    setMovementActionState("idle");
-                    movementActionStateHasChanged = false;
-                }
-
-                if (isAttacking()) {
-                    if (animationCombatState != null) {
-
-                        Animation a = skeletonData.findAnimation("attack");
-                        if (a != null )
-                            animationState.addAnimation(1, a, false, 0);
-
-                        movementCombatStateHasChanged = false;
-                        setMovementCombatState("idle");
-                    }
-                }
-
-                Vector2 pos = HelperUtils.convertPixelsToUnits(positionX, positionY);
-
-                animationState.update(movementDelta);
-                animationState.apply(skeleton);
-                skeleton.updateWorldTransform();
-
-                movementDelta = 0;
-
-                positionX = HelperUtils.convertUnitsToPixel(body.getPosition().x);
-                positionY = HelperUtils.convertUnitsToPixel(body.getPosition().y);
-            }
+        if (isJumping()) {
+            body.setLinearVelocity(linearVelocity.x, 5f);
+            setMovementState(movementStatePrevious);
         }
 
-        needsUpdate = false;
+        if ((isWalking() || isAttacking()) && movementStatePrevious != "jump") {
+            body.setLinearVelocity(movementDirection * speed, linearVelocity.y);
+        }
+
+        if (isAttacking()) {
+            setMovementState(movementStatePrevious);
+        }
+
+        animationState.update(delta);
+        animationState.apply(skeleton);
+
+        skeleton.updateWorldTransform();
+
+        positionX = HelperUtils.convertUnitsToPixel(body.getPosition().x);
+        positionY = HelperUtils.convertUnitsToPixel(body.getPosition().y);
     }
 
     public void draw(Batch batch) {
         skeletonRenderer.draw(batch, skeleton);
     }
 
-    abstract void attack();
-    abstract void run();
-    abstract void walk(int direction);
-    abstract void jump();
-    abstract void doubleJump();
-    abstract void idle();
-    abstract void die();
+    protected void attack() {
+        if (!isAttacking()) {
+            animationState.setAnimation(1, "shoot", false);
+            setMovementState("attack");
+        }
+    }
+
+    protected void secondaryAttack() {
+        if (!isAttacking()) {
+            animationState.setAnimation(1, "attack", false);
+            setMovementState("secondary_attack");
+        }
+    }
+
+    protected void run() {
+        setMovementState("run");
+    }
+
+    protected void walk(int direction) {
+        if (!isWalking()) {
+            animationState.setAnimation(0, "walk", true);
+            setMovementState("walk");
+            setMovementDirection(direction);
+        }
+    }
+
+    protected void jump() {
+        if ( !isJumping()) {
+            animationState.setAnimation(0, "jump", false);
+            setMovementState("jump");
+        }
+    }
+
+    protected void doubleJump() {
+        setMovementState("double_jump");
+    }
+
+    protected void idle() {
+        if (!isIdle()) {
+            animationState.setAnimation(0, "idle", true);
+            setMovementState("idle");
+        }
+    }
+
+    protected void die() {
+        setMovementState("die");
+    }
 
     @Override
     public void updateWorldBody(float x, float y, float r) {
-        setBodyPosition(x,y,r);
+        setBodyPosition(x, y, r);
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
     public void show() {
-
     }
 
     public abstract Weapon getPrimaryWeapon();
