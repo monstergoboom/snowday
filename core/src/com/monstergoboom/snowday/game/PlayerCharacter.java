@@ -13,6 +13,11 @@ public class PlayerCharacter extends Character {
     protected float magicRefreshRate;
     protected float magicRefreshDelta;
     protected float magicRefreshAmountPerRefresh;
+
+    protected float healthRefreshRate;
+    protected float healthRefreshDelta;
+    protected float healthRefreshAmountPerRefresh;
+
     protected float primaryWeaponMagicCost;
     protected float secondaryWeaponMagicCost;
     protected float actionMagicCost;
@@ -21,8 +26,12 @@ public class PlayerCharacter extends Character {
         super(assetName, scale, x, y, "player_character", "character", b2World, sd, 0x0002, 0xffff & ~0x0004);
         this.assetManager = assetManager;
         magicRefreshRate = 1.5f;
-        magicRefreshDelta = 0.0f;
         magicRefreshAmountPerRefresh = 2.1f;
+        magicRefreshDelta = 0f;
+
+        healthRefreshRate = 1.5f;
+        healthRefreshAmountPerRefresh = 5f;
+        healthRefreshDelta = 0f;
 
         primaryWeaponMagicCost = 5f;
         secondaryWeaponMagicCost = 2f;
@@ -87,22 +96,47 @@ public class PlayerCharacter extends Character {
     @Override
     public void update(float delta) {
 
-        magicRefreshDelta += delta;
-        if (magicRefreshDelta>magicRefreshRate) {
-            float v = magicRefreshDelta / magicRefreshRate;
-            float t = v * magicRefreshAmountPerRefresh;
-
-            magicRefreshDelta = 0;
-
-            currentMagic += (int)t;
-
-            if (currentMagic > maxMagic) {
-                currentMagic = maxMagic;
-            }
-        }
+        updateMagic(delta);
+        updateHealth(delta);
 
         super.update(delta);
 
         Gdx.app.log("PlayerCharacter", String.format("current magic: %d", currentMagic));
+    }
+
+    private void updateHealth(float delta) {
+        if(currentHealth < maxHealth ) {
+            healthRefreshDelta += delta;
+            if (healthRefreshDelta > magicRefreshRate) {
+                float v = healthRefreshDelta / healthRefreshRate;
+                float t = v * healthRefreshAmountPerRefresh;
+
+                healthRefreshDelta = 0;
+
+                currentHealth += (int) t;
+
+                if (currentHealth > maxHealth) {
+                    currentHealth = maxHealth;
+                }
+            }
+        }
+    }
+
+    private void updateMagic(float delta) {
+        if (currentMagic < maxMagic) {
+            magicRefreshDelta += delta;
+            if (magicRefreshDelta > magicRefreshRate) {
+                float v = magicRefreshDelta / magicRefreshRate;
+                float t = v * magicRefreshAmountPerRefresh;
+
+                magicRefreshDelta = 0;
+
+                currentMagic += (int) t;
+
+                if (currentMagic > maxMagic) {
+                    currentMagic = maxMagic;
+                }
+            }
+        }
     }
 }

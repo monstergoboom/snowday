@@ -16,11 +16,14 @@ public class SantaClause extends PlayerCharacter {
         speed = 3.5f;
         primaryWeapon = null;
 
-        maxHealth = 1000;
-        currentHealth = 1000;
+        maxHealth = 100;
+        currentHealth = 75;
 
         maxMagic = 100;
         currentMagic = 75;
+
+        healthRefreshRate = 2.5f;
+        healthRefreshAmountPerRefresh = 5.0f;
 
         magicRefreshRate = 1.0f;
         magicRefreshAmountPerRefresh = 5.0f;
