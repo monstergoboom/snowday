@@ -25,7 +25,7 @@ public class OrnamentBlaster extends Weapon {
     public OrnamentBlaster(Bullet bullet, SnowDayAssetManager assetManager) {
         super("projectile", "Santa's Ornament Hand Blaster");
         this.assetManager = assetManager;
-        maxCapacity = 2;
+        maxCapacity = 15;
         currentCount = maxCapacity;
         magazine = new LinkedList<>();
         this.bullet = bullet;

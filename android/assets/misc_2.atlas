@@ -1,0 +1,54 @@
+misc_2.png
+size: 236, 141
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+blue_ornament
+  rotate: true
+  xy: 1, 1
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+green_ornament
+  rotate: true
+  xy: 27, 1
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+red_ornament
+  rotate: true
+  xy: 53, 1
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1
+snowglobe_base
+  rotate: false
+  xy: 105, 1
+  size: 121, 25
+  orig: 129, 25
+  offset: 4, 0
+  index: -1
+snowglobe_top
+  rotate: false
+  xy: 1, 28
+  size: 116, 112
+  orig: 116, 112
+  offset: 0, 0
+  index: -1
+snowglobe_top_mask
+  rotate: false
+  xy: 119, 28
+  size: 116, 112
+  orig: 116, 112
+  offset: 0, 0
+  index: -1
+yellow_ornament
+  rotate: true
+  xy: 79, 1
+  size: 23, 24
+  orig: 23, 24
+  offset: 0, 0
+  index: -1

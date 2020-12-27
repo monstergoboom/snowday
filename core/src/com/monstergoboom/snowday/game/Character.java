@@ -105,14 +105,16 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     }
 
     public void beginContact(GameObject contactWith) {
-        if (contactWith.getReferenceCategory() == "snow_ground") {
+        if (contactWith.getReferenceCategory() == "platform") {
             hasGroundContact = true;
+            Gdx.app.log("character", String.format("has ground contact with %s", contactWith.reference_name));
         }
     }
 
     public void endContact(GameObject contactWith) {
-        if (contactWith.getReferenceCategory() == "snow_ground") {
+        if (contactWith.getReferenceCategory() == "platform") {
             hasGroundContact = false;
+            Gdx.app.log("character", String.format("has lost ground contact with %s", contactWith.reference_name));
         }
     }
 
@@ -276,11 +278,12 @@ public abstract class Character extends GameObject implements PhysicsComponent {
             setMovementState(movementStatePrevious);
         }
 
-        if ((isWalking() || isAttacking()) && movementStatePrevious != "jump") {
+        if (isWalking() && movementStatePrevious != "jump") {
             body.setLinearVelocity(movementDirection * speed, linearVelocity.y);
         }
 
-        if (isAttacking()) {
+        if (isAttacking() && movementStatePrevious != "jump") {
+            body.setLinearVelocity(linearVelocity.x, linearVelocity.y);
             setMovementState(movementStatePrevious);
         }
 
@@ -299,7 +302,7 @@ public abstract class Character extends GameObject implements PhysicsComponent {
 
     protected void attack() {
         if (!isAttacking()) {
-            animationState.setAnimation(1, "shoot", false);
+            animationState.setAnimation(2, "shoot", false);
             setMovementState("attack");
         }
     }
@@ -338,6 +341,7 @@ public abstract class Character extends GameObject implements PhysicsComponent {
         if (!isIdle()) {
             animationState.setAnimation(0, "idle", true);
             setMovementState("idle");
+            animationState.clearTrack(2);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.monstergoboom.snowday.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.SkeletonData;
 
@@ -9,19 +10,40 @@ import com.esotericsoftware.spine.SkeletonData;
 public class PlayerCharacter extends Character {
     SnowDayAssetManager assetManager;
 
+    protected float magicRefreshRate;
+    protected float magicRefreshDelta;
+    protected float magicRefreshAmountPerRefresh;
+    protected float primaryWeaponMagicCost;
+    protected float secondaryWeaponMagicCost;
+    protected float actionMagicCost;
+
     public PlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd, SnowDayAssetManager assetManager) {
         super(assetName, scale, x, y, "player_character", "character", b2World, sd, 0x0002, 0xffff & ~0x0004);
         this.assetManager = assetManager;
+        magicRefreshRate = 1.5f;
+        magicRefreshDelta = 0.0f;
+        magicRefreshAmountPerRefresh = 2.1f;
+
+        primaryWeaponMagicCost = 5f;
+        secondaryWeaponMagicCost = 2f;
+
+        actionMagicCost = 12.2f;
     }
 
     @Override
     protected void attack() {
-        super.attack();
+        if (currentMagic >= primaryWeaponMagicCost) {
+            super.attack();
+            currentMagic -= primaryWeaponMagicCost;
+        }
     }
 
     @Override
     protected void secondaryAttack() {
-        super.secondaryAttack();
+        if (currentMagic >= secondaryWeaponMagicCost) {
+            super.secondaryAttack();
+            currentMagic -= secondaryWeaponMagicCost;
+        }
     }
 
     @Override
@@ -36,7 +58,10 @@ public class PlayerCharacter extends Character {
 
     @Override
     protected void jump() {
-        super.jump();
+        if (currentMagic >= actionMagicCost) {
+            super.jump();
+            currentMagic -= actionMagicCost;
+        }
     }
 
     @Override
@@ -57,5 +82,27 @@ public class PlayerCharacter extends Character {
     @Override
     public Weapon getPrimaryWeapon() {
         return null;
+    }
+
+    @Override
+    public void update(float delta) {
+
+        magicRefreshDelta += delta;
+        if (magicRefreshDelta>magicRefreshRate) {
+            float v = magicRefreshDelta / magicRefreshRate;
+            float t = v * magicRefreshAmountPerRefresh;
+
+            magicRefreshDelta = 0;
+
+            currentMagic += (int)t;
+
+            if (currentMagic > maxMagic) {
+                currentMagic = maxMagic;
+            }
+        }
+
+        super.update(delta);
+
+        Gdx.app.log("PlayerCharacter", String.format("current magic: %d", currentMagic));
     }
 }

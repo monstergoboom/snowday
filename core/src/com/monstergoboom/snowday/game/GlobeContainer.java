@@ -29,6 +29,7 @@ public class GlobeContainer {
     protected TextureAtlas.AtlasRegion atlasRegionMask;
     protected TextureRegion updatedRegion;
     protected Sprite sprite;
+    protected Sprite sprite_base;
 
     protected String asset;
     protected String region;
@@ -87,6 +88,8 @@ public class GlobeContainer {
                     sprite = textureAtlas.createSprite(region);
                 }
 
+                sprite_base = textureAtlas.createSprite("snowglobe_base");
+
                 if (maskIndex >= 0) {
                     atlasRegionMask = textureAtlas.findRegion(maskRegion, maskIndex);
                 } else {
@@ -114,39 +117,53 @@ public class GlobeContainer {
     }
 
     public void update(float animationDelta) {
-        if(needsUpdate) {
+        if (needsUpdate) {
             percentComplete = (float) current / (float) max;
             drawHeight = (int) (originalMaskHeight * percentComplete);
 
-            updatedRegion.setRegionHeight(drawHeight);
+            if (drawHeight > originalMaskHeight) {
+                drawHeight = originalMaskHeight;
+            }
+
+            updatedRegion = new TextureRegion(atlasRegionMask.getTexture(),
+                    atlasRegionMask.getRegionX(),
+                    atlasRegionMask.getRegionY(),
+                    atlasRegionMask.getRegionWidth(),
+                    drawHeight);
+
             updatedRegion.flip(true, true);
 
-            drawHeight = (int) (height * percentComplete);
+            drawHeight = (int)(height * percentComplete);
 
-            text = String.format("%s\n% d%%", name, (int)percentComplete * 100);
+            text = String.format("%s", name);
 
             needsUpdate = false;
         }
     }
 
     public void drawText(Batch fontBatch) {
-        font.draw(fontBatch, text, x, y + height/2 + font.getDescent(),
+        font.draw(fontBatch, text, x, y + (int)(height/2) + font.getLineHeight() + font.getDescent(),
                 width, Align.center, true);
     }
 
     public void draw(Batch batch) {
-        Color temp = batch.getColor();
+        Color temp = batch.getColor().cpy();
 
         batch.setColor(color.r, color.g, color.b, 1.0f);
+
         batch.draw(updatedRegion,
-                HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y),
-                HelperUtils.convertPixelsToUnits(width),
-                HelperUtils.convertPixelsToUnits(drawHeight));
+            HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y),
+            HelperUtils.convertPixelsToUnits(width),
+            HelperUtils.convertPixelsToUnits(drawHeight));
 
         batch.setColor(temp);
 
         sprite.setPosition(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y));
         sprite.setSize(HelperUtils.convertPixelsToUnits(width), HelperUtils.convertPixelsToUnits(height));
         sprite.draw(batch);
+
+        sprite_base.setPosition(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y-5));
+        sprite_base.setSize(HelperUtils.convertPixelsToUnits(width), HelperUtils.convertPixelsToUnits(20));
+        sprite_base.draw(batch);
     }
 }

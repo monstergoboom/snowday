@@ -14,12 +14,17 @@ public class PlayerHud {
     protected RedGiftBox giftBox1;
     protected RedGiftBox giftBox2;
     protected RedGiftBox giftBox3;
+    protected PlayerCharacter player;
 
-    public PlayerHud(SnowDayAssetManager asm) {
-        healthGlobe = new HealthGlobe(25, Gdx.graphics.getHeight() - 150, 128, 128, 100,100,
+    public PlayerHud(PlayerCharacter player, SnowDayAssetManager asm) {
+        this.player = player;
+
+        healthGlobe = new HealthGlobe(25, Gdx.graphics.getHeight() - 150, 128, 128,
+                player.getMaxHealth(),player.getCurrentHealth(),
                 asm);
 
-        magicGlobe = new MagicGlobe(125, Gdx.graphics.getHeight() - 150, 100, 100, 100,100,
+        magicGlobe = new MagicGlobe(125, Gdx.graphics.getHeight() - 150, 128, 128,
+                player.getMaxMagic(),player.getCurrentMagic(),
                 asm);
 
         playerScore = new PlayerScore(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 50, .1f,
@@ -36,8 +41,12 @@ public class PlayerHud {
     }
 
     public void update(float animationDelta) {
+        healthGlobe.setCurrent(player.getCurrentHealth());
         healthGlobe.update(animationDelta);
+
+        magicGlobe.setCurrent(player.getCurrentMagic());
         magicGlobe.update(animationDelta);
+
         playerScore.update(animationDelta);
         giftBox1.update(animationDelta);
         giftBox2.update(animationDelta);

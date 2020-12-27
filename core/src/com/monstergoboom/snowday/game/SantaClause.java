@@ -15,6 +15,19 @@ public class SantaClause extends PlayerCharacter {
         super("santa", .35f, x, y, b2World, sd, assetManager);
         speed = 3.5f;
         primaryWeapon = null;
+
+        maxHealth = 1000;
+        currentHealth = 1000;
+
+        maxMagic = 100;
+        currentMagic = 75;
+
+        magicRefreshRate = 1.0f;
+        magicRefreshAmountPerRefresh = 5.0f;
+
+        actionMagicCost = 8f;
+        primaryWeaponMagicCost = 2.5f;
+        secondaryWeaponMagicCost = 5.0f;
     }
 
     public void setPrimaryWeapon(Weapon weapon) {
@@ -28,13 +41,19 @@ public class SantaClause extends PlayerCharacter {
 
     @Override
     protected void attack() {
-        super.attack();
+        if (canAttack()) {
+            super.attack();
 
-        if (primaryWeapon != null) {
-            primaryWeapon.setPosition(positionX, positionY + (150));
-            primaryWeapon.setDirection(movementDirection);
-            primaryWeapon.fire();
+            if (primaryWeapon != null) {
+                primaryWeapon.setPosition(positionX, positionY + (150));
+                primaryWeapon.setDirection(movementDirection);
+                primaryWeapon.fire();
+            }
         }
+    }
+
+    private boolean canAttack() {
+        return currentMagic >= 5;
     }
 
     @Override

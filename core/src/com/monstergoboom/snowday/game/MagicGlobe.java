@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.Color;
 public class MagicGlobe extends GlobeContainer {
     public MagicGlobe(int positionX, int positionY, int originalWidth, int originalHeight,
                        int maxSize, int initialValue, SnowDayAssetManager asm) {
-        super("misc", "snowglobe_top", HelperUtils.regionIndexNone, "snowglobe_top_mask",
+        super("misc_2", "snowglobe_top", HelperUtils.regionIndexNone, "snowglobe_top_mask",
                 HelperUtils.regionIndexNone, "Magic",
                 positionX, positionY, originalWidth, originalHeight,
-                maxSize, initialValue, Color.GREEN,
+                maxSize, initialValue, Color.BLUE,
                 asm.getAssetManager(),
-                asm.getTextureAtlas("misc"),
+                asm.getTextureAtlas("misc_2"),
                 HelperUtils.emptyTexture,
                 asm.getBitmapFont(HelperUtils.displayFontS));
     }

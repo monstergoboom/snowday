@@ -97,8 +97,6 @@ public class SnowDay extends ApplicationAdapter{
 
         snowflakeGenerator.start();
 
-        playerHud = new PlayerHud(snowDayAssetManager);
-
         TextureAtlas miscTextureAtlas = snowDayAssetManager.getTextureAtlas("misc");
 
         ornamentBlaster = new OrnamentBlaster(new RedOrnamentBullet(600, 600,
@@ -107,6 +105,8 @@ public class SnowDay extends ApplicationAdapter{
                 snowDayAssetManager);
 
         santaClause.setPrimaryWeapon(ornamentBlaster);
+
+        playerHud = new PlayerHud(santaClause, snowDayAssetManager);
 
         Array<Controller> a = Controllers.getControllers();
 
@@ -145,7 +145,7 @@ public class SnowDay extends ApplicationAdapter{
 
         snowflakeGenerator.draw(spriteBatch);
 
-        //playerHud.draw(spriteBatch);
+        playerHud.draw(spriteBatch);
 
         spriteBatch.end();
 
