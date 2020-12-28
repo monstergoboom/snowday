@@ -1,8 +1,10 @@
 package com.monstergoboom.snowday.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.SkeletonData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by amitrevski on 12/23/14.
@@ -22,6 +24,8 @@ public class PlayerCharacter extends Character {
     protected float secondaryWeaponMagicCost;
     protected float actionMagicCost;
 
+    protected Map<String, Integer> inventory;
+
     public PlayerCharacter(String assetName, float scale, int x, int y, World b2World, SkeletonData sd, SnowDayAssetManager assetManager) {
         super(assetName, scale, x, y, "player_character", "character", b2World, sd, 0x0002, 0xffff & ~0x0004);
         this.assetManager = assetManager;
@@ -37,6 +41,29 @@ public class PlayerCharacter extends Character {
         secondaryWeaponMagicCost = 2f;
 
         actionMagicCost = 12.2f;
+
+        inventory = new HashMap<>();
+    }
+
+    protected void addItemToInventory(String itemName, int count) {
+        if (count > 0) {
+            inventory.put(itemName, getItemInventoryCount(itemName) + count);
+        }
+    }
+
+    protected void removeItemFromInventory(String itemName, int count) {
+        if (count > 0) {
+            int itemInventoryCount = getItemInventoryCount(itemName);
+            if (count > itemInventoryCount) {
+                inventory.put(itemName, 0);
+            } else {
+                inventory.put(itemName, itemInventoryCount - count);
+            }
+        }
+    }
+
+    protected int getItemInventoryCount(String itemName) {
+        return inventory.getOrDefault(itemName, 0);
     }
 
     @Override
@@ -88,6 +115,16 @@ public class PlayerCharacter extends Character {
         super.die();
     }
 
+    public void reloadPrimaryWeapon() {
+        if (getItemInventoryCount("green_ornament") > 0) {
+
+            int reloaded = getPrimaryWeapon()
+                    .reload(getItemInventoryCount("green_ornament"));
+
+            removeItemFromInventory("green_ornament", reloaded);
+        }
+    }
+
     @Override
     public Weapon getPrimaryWeapon() {
         return null;
@@ -100,8 +137,6 @@ public class PlayerCharacter extends Character {
         updateHealth(delta);
 
         super.update(delta);
-
-        Gdx.app.log("PlayerCharacter", String.format("current magic: %d", currentMagic));
     }
 
     private void updateHealth(float delta) {

@@ -144,7 +144,6 @@ public class SnowDay extends ApplicationAdapter{
         santaClause.draw(spriteBatch);
 
         snowflakeGenerator.draw(spriteBatch);
-
         playerHud.draw(spriteBatch);
 
         spriteBatch.end();

@@ -23,7 +23,7 @@ public class OrnamentBlaster extends Weapon {
     private SnowDayAssetManager assetManager;
 
     public OrnamentBlaster(Bullet bullet, SnowDayAssetManager assetManager) {
-        super("projectile", "Santa's Ornament Hand Blaster");
+        super("projectile", "Santa's Ornament Hand Blaster", "blaster", "weapon");
         this.assetManager = assetManager;
         maxCapacity = 15;
         currentCount = maxCapacity;
@@ -44,6 +44,11 @@ public class OrnamentBlaster extends Weapon {
     }
 
     @Override
+    public int getCurrentAmmo() {
+        return currentCount;
+    }
+
+    @Override
     public void fire() {
         if (currentCount > 0 ) {
             currentCount -= 1;
@@ -57,18 +62,32 @@ public class OrnamentBlaster extends Weapon {
 
     @Override
     public int reload(int count) {
-        int reloadCount = maxCapacity - currentCount;
-
-        while(!fired.isEmpty()) {
-            Bullet bullet = fired.poll();
-            bullet.hide();
-            bullet.setPosition(0,0);
-            magazine.offer(bullet);
+        if (count == 0) {
+            return count;
         }
 
-        currentCount = maxCapacity;
+        int loaded = 0;
 
-        return reloadCount;
+        if (currentCount < maxCapacity ) {
+            int reload = maxCapacity - currentCount;
+            int totalFired = fired.size();
+
+            if (count < reload) {
+                reload = count;
+            }
+
+            while (!fired.isEmpty() && (loaded < reload)) {
+                Bullet bullet = fired.poll();
+                bullet.hide();
+                bullet.setPosition(0, 0);
+                magazine.offer(bullet);
+                loaded ++;
+            }
+
+            currentCount += loaded;
+        }
+
+        return loaded;
     }
 
     @Override

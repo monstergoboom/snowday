@@ -1,6 +1,5 @@
 package com.monstergoboom.snowday.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.SkeletonData;
@@ -16,7 +15,7 @@ public class SantaClause extends PlayerCharacter {
         speed = 3.5f;
         primaryWeapon = null;
 
-        maxHealth = 100;
+        maxHealth = 150;
         currentHealth = 75;
 
         maxMagic = 100;
@@ -31,6 +30,11 @@ public class SantaClause extends PlayerCharacter {
         actionMagicCost = 8f;
         primaryWeaponMagicCost = 2.5f;
         secondaryWeaponMagicCost = 5.0f;
+
+        addItemToInventory("red_ornament", 10);
+        addItemToInventory("green_ornament", 10);
+        addItemToInventory("blue_ornament", 10);
+        addItemToInventory("yellow_ornament", 10);
     }
 
     public void setPrimaryWeapon(Weapon weapon) {

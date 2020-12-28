@@ -12,8 +12,8 @@ public abstract class Weapon extends GameObject {
     protected int y;
     protected int direction;
 
-    public Weapon(String weaponType, String weaponName) {
-        super("weapon", "weapon");
+    public Weapon(String weaponType, String weaponName, String resourceName, String resourceCategory) {
+        super(resourceName, resourceCategory);
 
         this.weaponType = weaponType;
         this.weaponName = weaponName;
@@ -51,4 +51,6 @@ public abstract class Weapon extends GameObject {
     @Override
     public void show() {
     }
+
+    abstract public int getCurrentAmmo();
 }

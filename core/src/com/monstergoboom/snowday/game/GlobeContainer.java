@@ -88,7 +88,12 @@ public class GlobeContainer {
                     sprite = textureAtlas.createSprite(region);
                 }
 
+                sprite.setPosition(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y));
+                sprite.setSize(HelperUtils.convertPixelsToUnits(width), HelperUtils.convertPixelsToUnits(height));
+
                 sprite_base = textureAtlas.createSprite("snowglobe_base");
+                sprite_base.setPosition(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y-5));
+                sprite_base.setSize(HelperUtils.convertPixelsToUnits(width), HelperUtils.convertPixelsToUnits(20));
 
                 if (maskIndex >= 0) {
                     atlasRegionMask = textureAtlas.findRegion(maskRegion, maskIndex);
@@ -158,12 +163,7 @@ public class GlobeContainer {
 
         batch.setColor(temp);
 
-        sprite.setPosition(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y));
-        sprite.setSize(HelperUtils.convertPixelsToUnits(width), HelperUtils.convertPixelsToUnits(height));
         sprite.draw(batch);
-
-        sprite_base.setPosition(HelperUtils.convertPixelsToUnits(x), HelperUtils.convertPixelsToUnits(y-5));
-        sprite_base.setSize(HelperUtils.convertPixelsToUnits(width), HelperUtils.convertPixelsToUnits(20));
         sprite_base.draw(batch);
     }
 }

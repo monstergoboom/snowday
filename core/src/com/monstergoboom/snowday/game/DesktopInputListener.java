@@ -33,7 +33,7 @@ public class DesktopInputListener implements InputProcessor {
                 playerCharacter.secondaryAttack();
                 break;
             case Input.Keys.R:
-                playerCharacter.getPrimaryWeapon().reload(10);
+                playerCharacter.reloadPrimaryWeapon();
                 break;
         }
 

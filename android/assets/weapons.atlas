@@ -1,0 +1,12 @@
+weapons.png
+size: 482, 200
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+blaster
+  rotate: false
+  xy: 1, 1
+  size: 480, 198
+  orig: 566, 222
+  offset: 43, 11
+  index: -1

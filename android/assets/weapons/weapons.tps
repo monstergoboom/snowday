@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>misc_2.txt</filename>
+                <filename>weapons.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,10 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">blue_ornament.png</key>
-            <key type="filename">green_ornament.png</key>
-            <key type="filename">red_ornament.png</key>
-            <key type="filename">yellow_ornament.png</key>
+            <key type="filename">blaster.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -193,53 +190,16 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>6,6,11,12</rect>
+                <rect>142,56,283,111</rect>
                 <key>scale9Paddings</key>
-                <rect>6,6,11,12</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">snowglobe_base.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,6,65,13</rect>
-                <key>scale9Paddings</key>
-                <rect>32,6,65,13</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">snowglobe_top.png</key>
-            <key type="filename">snowglobe_top_mask.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>29,28,58,56</rect>
-                <key>scale9Paddings</key>
-                <rect>29,28,58,56</rect>
+                <rect>142,56,283,111</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>blue_ornament.png</filename>
-            <filename>green_ornament.png</filename>
-            <filename>red_ornament.png</filename>
-            <filename>yellow_ornament.png</filename>
-            <filename>snowglobe_top.png</filename>
-            <filename>snowglobe_base.png</filename>
-            <filename>snowglobe_top_mask.png</filename>
+            <filename>blaster.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
