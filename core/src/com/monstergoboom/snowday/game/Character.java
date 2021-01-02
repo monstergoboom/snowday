@@ -1,6 +1,7 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonBatch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
@@ -59,11 +60,15 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     protected short filterMask;
 
     protected boolean hasGroundContact;
+    protected int groundContact;
 
     protected int maxHealth;
     protected int currentHealth;
     protected int maxMagic;
     protected int currentMagic;
+
+    Sound walking;
+    Sound jumping;
 
     public Character(String assetNameParam, float drawScale, int x, int y,
                      String gameObjectName, String gameObjectCategory,
@@ -97,6 +102,12 @@ public abstract class Character extends GameObject implements PhysicsComponent {
 
         hasGroundContact = false;
 
+        walking = Gdx.audio.newSound(Gdx.files.internal("sounds/snow-footsteps.ogg"));
+        walking.loop(1.0f);
+        walking.pause();
+
+        jumping = Gdx.audio.newSound(Gdx.files.internal("sounds/jump.ogg"));
+
         LoadSkeleton();
     }
 
@@ -107,15 +118,18 @@ public abstract class Character extends GameObject implements PhysicsComponent {
     public void beginContact(GameObject contactWith) {
         if (contactWith.getReferenceCategory() == "platform") {
             hasGroundContact = true;
-            Gdx.app.log("character", String.format("has ground contact with %s", contactWith.reference_name));
+            groundContact++;
         }
+
+        hasGroundContact = groundContact > 0;
     }
 
     public void endContact(GameObject contactWith) {
         if (contactWith.getReferenceCategory() == "platform") {
-            hasGroundContact = false;
-            Gdx.app.log("character", String.format("has lost ground contact with %s", contactWith.reference_name));
+            groundContact--;
         }
+
+        hasGroundContact = groundContact > 0;
     }
 
     public int getMaxHealth() {
@@ -291,8 +305,11 @@ public abstract class Character extends GameObject implements PhysicsComponent {
             setMovementState(movementStatePrevious);
         }
 
-        if (isWalking() && movementStatePrevious != "jump") {
+        if (isWalking() && movementStatePrevious != "jump" && hasGroundContact()) {
             body.setLinearVelocity(movementDirection * speed, linearVelocity.y);
+            walking.resume();
+        } else {
+            walking.pause();
         }
 
         if (isAttacking() && movementStatePrevious != "jump") {
@@ -345,6 +362,7 @@ public abstract class Character extends GameObject implements PhysicsComponent {
         if ( !isJumping()) {
             animationState.setAnimation(0, "jump", false);
             setMovementState("jump");
+            jumping.play(0.05f);
         }
     }
 

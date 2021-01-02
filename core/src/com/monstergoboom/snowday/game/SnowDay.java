@@ -2,6 +2,7 @@ package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -43,6 +44,8 @@ public class SnowDay extends ApplicationAdapter{
     private Controller controller;
     private PlayerControllerListener playerControllerListener;
 
+    Sound winterWind;
+
     public void setup() {
         HelperUtils.updateUnitRatios(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 8f);
 
@@ -65,6 +68,9 @@ public class SnowDay extends ApplicationAdapter{
     }
 
     public void initialize() {
+        winterWind = Gdx.audio.newSound(Gdx.files.internal("sounds/winter-wind.ogg"));
+        winterWind.loop(.5f);
+
         background = new Background("backdrop_1", physicsSystem.getWorld(),
                 snowDayAssetManager.getTexture("backdrop_1"));
 
@@ -214,6 +220,8 @@ public class SnowDay extends ApplicationAdapter{
     @Override
     public void dispose() {
         super.dispose();
+
+        winterWind.dispose();
 
         spriteBatch.dispose();
         fontSpriteBatch.dispose();
