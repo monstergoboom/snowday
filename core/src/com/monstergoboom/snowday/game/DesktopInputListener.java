@@ -35,6 +35,24 @@ public class DesktopInputListener implements InputProcessor {
             case Input.Keys.R:
                 playerCharacter.reloadPrimaryWeapon();
                 break;
+            case Input.Keys.C:
+                playerCharacter.crouch();
+                break;
+            case Input.Keys.Z:
+                playerCharacter.prone();
+                break;
+            case Input.Keys.UP:
+                playerCharacter.switchAmmo("red");
+                break;
+            case Input.Keys.DOWN:
+                playerCharacter.switchAmmo("blue");
+                break;
+            case Input.Keys.LEFT:
+                playerCharacter.switchAmmo("green");
+                break;
+            case Input.Keys.RIGHT:
+                playerCharacter.switchAmmo("yellow");
+                break;
         }
 
         return false;
@@ -46,11 +64,12 @@ public class DesktopInputListener implements InputProcessor {
 
         switch(keycode) {
             case Input.Keys.A:
-                playerCharacter.idle();
-                break;
             case Input.Keys.F:
                 playerCharacter.idle();
                 break;
+            case Input.Keys.C:
+            case Input.Keys.Z:
+                playerCharacter.stand();
         }
 
         return false;

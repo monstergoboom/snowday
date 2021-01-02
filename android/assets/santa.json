@@ -1,7 +1,7 @@
 {
 "skeleton": {
-	"hash": "W47j2zkPir0",
-	"spine": "4.0.48-beta",
+	"hash": "LUDNX3xqFbg",
+	"spine": "4.0.50-beta",
 	"x": -472.04,
 	"y": -7.19,
 	"width": 714.28,
@@ -18,7 +18,7 @@
 	{ "name": "right_arm", "parent": "core", "length": 133.7, "rotation": -78.05, "x": -37.3, "y": 499.68 },
 	{ "name": "blaster", "parent": "right_arm", "length": 164.94, "rotation": 77.51, "x": 219.36, "y": 7.38 },
 	{ "name": "left_arm", "parent": "core", "length": 158.81, "rotation": 143.28, "x": 8.64, "y": 551.72 },
-	{ "name": "bone", "parent": "root", "length": 161.22, "rotation": 123.69, "x": 3.67, "y": 634.9 }
+	{ "name": "head", "parent": "upper_body", "length": 161.22, "rotation": 28.38, "x": 366.04, "y": -60.57 }
 ],
 "slots": [
 	{ "name": "l_arm", "bone": "left_arm", "attachment": "l_arm" },
@@ -28,7 +28,7 @@
 	{ "name": "r_leg", "bone": "right_leg", "attachment": "r_leg" },
 	{ "name": "blaster", "bone": "blaster", "attachment": "blaster" },
 	{ "name": "r_arm", "bone": "right_arm", "attachment": "r_arm" },
-	{ "name": "head", "bone": "bone", "attachment": "head" }
+	{ "name": "head", "bone": "head", "attachment": "head" }
 ],
 "skins": [
 	{
@@ -100,9 +100,57 @@
 			}
 		}
 	},
+	"crouch": {
+		"bones": {
+			"right_leg": {
+				"rotate": [
+					{},
+					{ "time": 0.1667, "value": -86.84 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": -43.13, "y": -88.18 }
+				]
+			},
+			"upper_body": {
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": 3.14, "y": -80.69 }
+				]
+			},
+			"left_arm": {
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": -0.23, "y": -213.02 }
+				]
+			},
+			"head": {
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": -41.31, "y": 9.49 }
+				]
+			},
+			"left_leg": {
+				"rotate": [
+					{},
+					{ "time": 0.1667, "value": 14.34 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": 91.41, "y": -39.91 }
+				]
+			},
+			"right_arm": {
+				"translate": [
+					{},
+					{ "time": 0.1667, "y": -126.17 }
+				]
+			}
+		}
+	},
 	"die": {
 		"bones": {
-			"bone": {
+			"head": {
 				"translate": [
 					{},
 					{ "time": 0.3333, "x": -190.92, "y": -183.96 }
@@ -202,6 +250,77 @@
 			}
 		}
 	},
+	"prone": {
+		"bones": {
+			"right_leg": {
+				"rotate": [
+					{ "value": -86.84 },
+					{ "time": 0.1333, "value": -96.7 }
+				],
+				"translate": [
+					{ "x": -43.13, "y": -88.18 }
+				]
+			},
+			"upper_body": {
+				"rotate": [
+					{ "value": 0.1 },
+					{ "time": 0.1333, "value": -94.18 }
+				],
+				"translate": [
+					{ "x": 3.14, "y": -80.69 }
+				]
+			},
+			"left_arm": {
+				"rotate": [
+					{ "time": 0.1333, "value": -85.09 }
+				],
+				"translate": [
+					{ "x": -0.23, "y": -213.02 },
+					{ "time": 0.1333, "x": 212.7, "y": -447.88 }
+				]
+			},
+			"head": {
+				"rotate": [
+					{ "time": 0.1333, "value": 34.29 }
+				],
+				"translate": [
+					{ "x": -34, "y": 4.33 }
+				]
+			},
+			"left_leg": {
+				"rotate": [
+					{ "value": 14.34 },
+					{ "time": 0.1333, "value": -75.78 }
+				],
+				"translate": [
+					{ "x": 91.41, "y": -39.91 },
+					{ "time": 0.1333, "x": -69.8, "y": -38.96 }
+				]
+			},
+			"right_arm": {
+				"rotate": [
+					{ "time": 0.1333, "value": 63.95 }
+				],
+				"translate": [
+					{ "y": -126.17 },
+					{ "time": 0.1333, "x": 177.03, "y": -390.74 }
+				]
+			},
+			"core": {
+				"rotate": [
+					{ "value": 0.34 }
+				]
+			},
+			"blaster": {
+				"rotate": [
+					{ "time": 0.1333, "value": -58.23 }
+				],
+				"translate": [
+					{ "time": 0.1333, "x": -24.05, "y": 12.86 }
+				]
+			}
+		}
+	},
 	"shoot": {
 		"bones": {
 			"right_arm": {
@@ -218,6 +337,54 @@
 				"translate": [
 					{},
 					{ "time": 0.0667, "x": -21.82, "y": -19.07 }
+				]
+			}
+		}
+	},
+	"stand": {
+		"bones": {
+			"right_leg": {
+				"rotate": [
+					{ "value": -86.84 },
+					{ "time": 0.3333 }
+				],
+				"translate": [
+					{ "x": -43.13, "y": -88.18 },
+					{ "time": 0.3333 }
+				]
+			},
+			"upper_body": {
+				"translate": [
+					{ "x": 3.14, "y": -80.69 },
+					{ "time": 0.3333 }
+				]
+			},
+			"left_arm": {
+				"translate": [
+					{ "x": -0.23, "y": -213.02 },
+					{ "time": 0.3333 }
+				]
+			},
+			"head": {
+				"translate": [
+					{ "x": -15.12, "y": -0.7 },
+					{ "time": 0.3333 }
+				]
+			},
+			"left_leg": {
+				"rotate": [
+					{ "value": 14.34 },
+					{ "time": 0.3333 }
+				],
+				"translate": [
+					{ "x": 91.41, "y": -39.91 },
+					{ "time": 0.3333 }
+				]
+			},
+			"right_arm": {
+				"translate": [
+					{ "y": -126.17 },
+					{ "time": 0.3333 }
 				]
 			}
 		}

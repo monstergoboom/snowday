@@ -9,8 +9,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         config.title = "SnowDay";
-        config.width = 1024;
-        config.height = 768;
+        config.width = 1920;
+        config.height = 1080;
 
 		new LwjglApplication(new SnowDay(), config);
 	}

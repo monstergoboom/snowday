@@ -247,6 +247,19 @@ public abstract class Character extends GameObject implements PhysicsComponent {
                 || movementState.equalsIgnoreCase("secondary_attack"));
     }
 
+    public boolean isCrouching() {
+        return (movementState.equalsIgnoreCase("crouch"));
+    }
+
+    public boolean isStanding() {
+        return (movementState.equalsIgnoreCase("idle")
+                || movementState.equalsIgnoreCase("stand"));
+    }
+
+    public boolean isProne() {
+        return movementState.equalsIgnoreCase("prone");
+    }
+
     public boolean isIdle() {
         return (movementState.equalsIgnoreCase("idle"));
     }
@@ -302,7 +315,9 @@ public abstract class Character extends GameObject implements PhysicsComponent {
 
     protected void attack() {
         if (!isAttacking()) {
-            animationState.setAnimation(2, "shoot", false);
+            if (!isProne()) {
+                animationState.setAnimation(2, "shoot", false);
+            }
             setMovementState("attack");
         }
     }
@@ -341,12 +356,37 @@ public abstract class Character extends GameObject implements PhysicsComponent {
         if (!isIdle()) {
             animationState.setAnimation(0, "idle", true);
             setMovementState("idle");
+            animationState.clearTrack(1);
             animationState.clearTrack(2);
+        }
+    }
+
+    protected void stand() {
+        if(isCrouching() || isProne()) {
+            setMovementState("stand");
+            animationState.setAnimation(0, "stand", false);
+        }
+    }
+
+    protected void crouch() {
+        if (!isCrouching()) {
+            setMovementState("crouch");
+            animationState.setAnimation(0, "crouch", false);
+        }
+    }
+
+    protected void prone() {
+        if (!isProne()) {
+            setMovementState("prone");
+            animationState.setAnimation(0, "prone", false);
         }
     }
 
     protected void die() {
         setMovementState("die");
+    }
+
+    protected void switchAmmo(String ammoName) {
     }
 
     @Override

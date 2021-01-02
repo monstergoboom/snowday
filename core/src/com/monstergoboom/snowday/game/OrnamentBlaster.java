@@ -1,6 +1,7 @@
 package com.monstergoboom.snowday.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -22,6 +23,9 @@ public class OrnamentBlaster extends Weapon {
     private Queue<Bullet> fired;
     private SnowDayAssetManager assetManager;
 
+    Sound sound;
+    int soundId;
+
     public OrnamentBlaster(Bullet bullet, SnowDayAssetManager assetManager) {
         super("projectile", "Santa's Ornament Hand Blaster", "blaster", "weapon");
         this.assetManager = assetManager;
@@ -30,6 +34,8 @@ public class OrnamentBlaster extends Weapon {
         magazine = new LinkedList<>();
         this.bullet = bullet;
         this.direction = 1;
+
+        sound = Gdx.audio.newSound(Gdx.files.internal("sounds/hollowthud.ogg"));
 
         magazine = Stream.generate(() -> {
             RedOrnamentBullet redOrnamentBullet = new RedOrnamentBullet(0, 0, bullet.world,
@@ -51,11 +57,16 @@ public class OrnamentBlaster extends Weapon {
     @Override
     public void fire() {
         if (currentCount > 0 ) {
+            sound.play(1.0f);
+
             currentCount -= 1;
+
             Bullet item = magazine.poll();
+
             item.show();
             item.setPosition(x,y);
-            item.shoot(20f, 5f, direction);
+            item.shoot(25f, 1.5f, direction);
+
             fired.offer(item);
         }
     }

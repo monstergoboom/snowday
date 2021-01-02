@@ -49,13 +49,27 @@ public class SantaClause extends PlayerCharacter {
     @Override
     protected void attack() {
         if (canAttack()) {
-            super.attack();
-
             if (primaryWeapon != null) {
-                primaryWeapon.setPosition(positionX, positionY + (150));
+                primaryWeapon.setPosition(getWeaponPositionX(), getWeaponPositionY());
                 primaryWeapon.setDirection(movementDirection);
                 primaryWeapon.fire();
             }
+            super.attack();
+        }
+    }
+
+    private int getWeaponPositionX() {
+        return positionX;
+    }
+
+    private int getWeaponPositionY() {
+        switch(movementState) {
+            case "crouch":
+                return positionY + 115;
+            case "prone":
+                return positionY + 50;
+            default:
+                return positionY + 150;
         }
     }
 
@@ -65,10 +79,11 @@ public class SantaClause extends PlayerCharacter {
 
     @Override
     public void draw(Batch batch) {
-        super.draw(batch);
         if (primaryWeapon != null) {
             primaryWeapon.draw(batch);
         }
+
+        super.draw(batch);
     }
 
     @Override

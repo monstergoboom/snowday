@@ -1,5 +1,6 @@
 package com.monstergoboom.snowday.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.SkeletonData;
 
@@ -113,6 +114,26 @@ public class PlayerCharacter extends Character {
     @Override
     protected void die() {
         super.die();
+    }
+
+    @Override
+    protected void crouch() {
+        super.crouch();
+    }
+
+    @Override
+    protected void stand() {
+        super.stand();
+    }
+
+    @Override
+    protected void prone() {
+        super.prone();
+    }
+
+    @Override
+    protected void switchAmmo(String ammoName) {
+        super.switchAmmo(ammoName);
     }
 
     public void reloadPrimaryWeapon() {
