@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -185,8 +186,7 @@ public abstract class Character extends GameObject implements PhysicsComponent {
             animationState.setAnimation(0, "idle", true);
             animationState.setTimeScale(animationSpeed);
 
-            List<SkinEntry> attachments = Arrays.asList(skeleton.getData().getDefaultSkin()
-                    .getAttachments().toArray());
+            final Array<SkinEntry> attachments = skeleton.getData().getDefaultSkin().getAttachments();
 
             attachments.forEach(skinEntry -> {
                 if (skinEntry.getAttachment() instanceof RegionAttachment) {

@@ -1,14 +1,12 @@
 buildscript {
     repositories {
-        jcenter()
-        mavenLocal()
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:4.1.3'
     }
 }
 
@@ -19,16 +17,15 @@ allprojects {
     version = '1.0'
     ext {
         appName = "snowday"
-        gdxVersion = '1.9.14'
-        gdxControllerVersion = '1.9.13'
-        roboVMVersion = '2.3.5'
+        gdxVersion = '1.11.0'
+        gdxControllersVersion = '2.2.2'
+        roboVMVersion = '2.3.16'
         box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
     }
 
     repositories {
-        jcenter()
         mavenLocal()
         mavenCentral()
         google()
@@ -45,25 +42,21 @@ project(":android") {
     dependencies {
         implementation project(":core")
         implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
-        implementation "com.badlogicgames.gdx:gdx-controllers:$gdxControllerVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers-android:$gdxControllerVersion"
+        implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
 
@@ -76,13 +69,13 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
-        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxControllerVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers-platform:$gdxControllerVersion:natives-desktop"
+        implementation "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+        implementation "com.badlogicgames.gdx:gdx-lwjgl3-glfw-awt-macos:$gdxVersion"
     }
 }
 
@@ -94,9 +87,9 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers:$gdxControllerVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        implementation "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
     }
 }
 
@@ -105,6 +98,7 @@ project(":spine") {
 
     dependencies {
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "com.esotericsoftware.spine:spine-libgdx:4.1.0"
     }
 }
 

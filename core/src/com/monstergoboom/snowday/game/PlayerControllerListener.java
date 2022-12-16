@@ -5,12 +5,10 @@ package com.monstergoboom.snowday.game;
  */
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
-import com.badlogic.gdx.controllers.PovDirection;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.Gdx;
 
 public class PlayerControllerListener implements ControllerListener {
-    private PlayerCharacter playerCharacter;
+    private final PlayerCharacter playerCharacter;
     public static final int MOVE_LEFT = 21; // dpad left
     public static final int MOVE_RIGHT = 22; // dpad right
     public static final int JUMP = 99; // button
@@ -76,26 +74,4 @@ public class PlayerControllerListener implements ControllerListener {
         Gdx.app.log("PlayerControllerListener", "Axis Moved " + axisCode);
         return false;
     }
-
-    @Override
-    public boolean povMoved(Controller controller, int povCode, PovDirection value) {
-        Gdx.app.log("PlayerControllerListener", "Pov Moved " + povCode);
-        return false;
-    }
-
-    @Override
-    public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
-        return false;
-    }
-
-    @Override
-    public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
-        return false;
-    }
-
-    @Override
-    public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
-        return false;
-    }
-
 }
