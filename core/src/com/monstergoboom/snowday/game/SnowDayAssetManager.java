@@ -29,10 +29,10 @@ public class SnowDayAssetManager {
 
     public void load() {
         if(!isLoaded) {
-            String[] textureAtlases = new String[] {"snow_ground", "santa", "misc", "elf", "misc_2", "weapons"};
+            String[] textureAtlases = new String[] {"snow_ground", "santa", "misc", "elf", "misc_2", "weapons", "tree"};
             String[] textures = new String[] {"backdrop_1", "snowflake_generator"};
             String[] fonts = new String[] { "curlz_mt", "curlz_mt_16", "display_font", "display_font_16" };
-            String[] skeletalData = new String[] {"santa", "elf"};
+            String[] skeletalData = new String[] {"santa", "elf", "tree"};
 
 
             // load texture atlases

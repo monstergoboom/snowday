@@ -87,8 +87,8 @@ public class SnowDay extends ApplicationAdapter{
         //reindeer = new Reindeer(700, 100, physicsSystem.getWorld(),
                 //snowDayAssetManager.getSkeletonData("reindeer"));
 
-        //tree1 = new ChristmasTree(900, 75, physicsSystem.getWorld(),
-                //snowDayAssetManager);
+        tree1 = new ChristmasTree(900, 75, physicsSystem.getWorld(),
+                snowDayAssetManager);
 
         snowGround = new SnowGround(physicsSystem.getWorld());
         snowflakeGenerator = new SnowflakeGenerator(
@@ -143,7 +143,7 @@ public class SnowDay extends ApplicationAdapter{
         background.draw(spriteBatch);
         snowGround.draw(spriteBatch);
 
-        //tree1.draw(spriteBatch);
+        tree1.draw(spriteBatch);
         elf.draw(spriteBatch);
         //snowman.draw(spriteBatch);
         //reindeer.draw(spriteBatch);
@@ -171,7 +171,7 @@ public class SnowDay extends ApplicationAdapter{
         elf.update(animationDelta);
         //snowman.update(animationDelta);
         //reindeer.update(animationDelta);
-        //tree1.update(animationDelta);
+        tree1.update(animationDelta);
         santaClause.update(animationDelta);
         snowflakeGenerator.update(animationDelta);
         playerHud.update(animationDelta);
